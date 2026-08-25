@@ -25,6 +25,10 @@
   --animate-pulse-dot-violet: pulse-dot-violet 1.6s ease-in-out infinite;
   --animate-ray: ray 2.4s ease-in-out infinite;
   --animate-pulse-soft: pulse-soft 2.8s ease-in-out infinite;
+  --animate-pop: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-shake: shake 0.5s ease-in-out both;
+  --animate-glow-pulse: glow-pulse 3.2s ease-in-out infinite;
+  --animate-boot-bar: boot-bar 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 
   @keyframes fade-up {
     from {
@@ -94,6 +98,51 @@
       opacity: 1;
     }
   }
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @keyframes shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    20% {
+      transform: translateX(-6px);
+    }
+    40% {
+      transform: translateX(6px);
+    }
+    60% {
+      transform: translateX(-4px);
+    }
+    80% {
+      transform: translateX(4px);
+    }
+  }
+  @keyframes glow-pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 14px rgb(0 229 255 / 0.25);
+    }
+    50% {
+      box-shadow: 0 0 30px rgb(0 229 255 / 0.55);
+    }
+  }
+  @keyframes boot-bar {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
 }
 
 @utility bg-blueprint {
@@ -116,5 +165,49 @@
   }
   ::selection {
     background: rgb(0 229 255 / 0.25);
+  }
+
+  :focus-visible {
+    outline: 1px solid rgb(0 229 255 / 0.7);
+    outline-offset: 2px;
+  }
+
+  /* slim dark scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #050508;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1e1e2a;
+    border-radius: 8px;
+    border: 2px solid #050508;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2a2a3a;
+  }
+
+  /* neon range slider */
+  input[type='range'] {
+    @apply h-1 w-full cursor-pointer appearance-none rounded-full bg-white/10;
+  }
+  input[type='range']::-webkit-slider-thumb {
+    appearance: none;
+    height: 14px;
+    width: 14px;
+    border-radius: 9999px;
+    background: #00e5ff;
+    border: 2px solid #050508;
+    box-shadow: 0 0 10px rgb(0 229 255 / 0.8);
+  }
+  input[type='range']::-moz-range-thumb {
+    height: 14px;
+    width: 14px;
+    border-radius: 9999px;
+    background: #00e5ff;
+    border: 2px solid #050508;
+    box-shadow: 0 0 10px rgb(0 229 255 / 0.8);
   }
 }

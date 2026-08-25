@@ -1,5 +1,6 @@
 import { Trash2, CircleDot } from 'lucide-react';
 import { useLabStore } from '../../store/labStore';
+import { play } from '../../utils/sound';
 import { cn } from '../../utils/cn';
 
 const SWATCHES = [
@@ -54,7 +55,10 @@ export function LedControls() {
               <button
                 key={c}
                 type="button"
-                onClick={() => updateLed(selected.id, { color: c })}
+                onClick={() => {
+                  updateLed(selected.id, { color: c });
+                  play('led');
+                }}
                 aria-label={`Ngjyra ${c}`}
                 className={cn(
                   'h-7 rounded-[3px] border transition-all duration-200',
@@ -98,7 +102,10 @@ export function LedControls() {
 
           <button
             type="button"
-            onClick={() => removeLed(selected.id)}
+            onClick={() => {
+              removeLed(selected.id);
+              play('click');
+            }}
             className="group flex w-full items-center justify-center gap-2 border border-white/15 py-2.5 font-mono text-[10px] uppercase tracking-[0.3em] text-fog transition-colors hover:border-red-400/60 hover:text-red-300"
           >
             <Trash2 className="size-3.5 transition-transform group-hover:scale-110" />

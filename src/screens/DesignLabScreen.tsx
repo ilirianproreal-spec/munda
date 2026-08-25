@@ -9,6 +9,7 @@ import { TestReport } from '../components/lab/TestReport';
 import { MAX_LEDS } from '../data/lab';
 import { LEVELS } from '../data/levels';
 import { useLabStore } from '../store/labStore';
+import { play } from '../utils/sound';
 import { cn } from '../utils/cn';
 
 export function DesignLabScreen() {
@@ -21,7 +22,7 @@ export function DesignLabScreen() {
   const levelDef = LEVELS[currentLevel - 1] ?? LEVELS[0];
 
   return (
-    <div className="relative min-h-screen bg-ink">
+    <div className="relative min-h-screen overflow-x-clip bg-ink">
       <div className="pointer-events-none absolute -left-40 top-0 h-96 w-96 rounded-full bg-electric/10 blur-[120px]" />
       <div className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-violet/10 blur-[120px]" />
       <div className="pointer-events-none fixed inset-0 bg-blueprint [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
@@ -61,13 +62,16 @@ export function DesignLabScreen() {
                 key={lv.id}
                 type="button"
                 disabled={!unlocked}
-                onClick={() => setLevel(lv.id)}
+                onClick={() => {
+                  play('click');
+                  setLevel(lv.id);
+                }}
                 className={cn(
-                  'relative border px-3 py-2.5 text-left transition-colors duration-300',
+                  'relative border px-3 py-2.5 text-left transition-all duration-300',
                   current
                     ? 'border-electric/70 bg-electric/10'
                     : unlocked
-                      ? 'border-white/10 hover:border-white/30'
+                      ? 'border-white/10 hover:-translate-y-0.5 hover:border-white/30'
                       : 'cursor-not-allowed border-white/5 opacity-40',
                 )}
               >

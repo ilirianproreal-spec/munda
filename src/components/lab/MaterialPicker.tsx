@@ -1,6 +1,7 @@
 import { Layers } from 'lucide-react';
 import { MATERIALS } from '../../data/lab';
 import { useLabStore } from '../../store/labStore';
+import { play } from '../../utils/sound';
 import { cn } from '../../utils/cn';
 
 export function MaterialPicker() {
@@ -18,7 +19,10 @@ export function MaterialPicker() {
           <button
             key={m.id}
             type="button"
-            onClick={() => setMaterial(m.id)}
+            onClick={() => {
+              setMaterial(m.id);
+              play('click');
+            }}
             className={cn(
               'border px-3 py-2.5 text-left transition-colors duration-200',
               material === m.id

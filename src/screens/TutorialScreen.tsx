@@ -45,7 +45,7 @@ export function TutorialScreen() {
   const prev = () => setStep((s) => Math.max(s - 1, 0));
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-ink">
+    <div className="relative flex min-h-screen flex-col overflow-x-clip bg-ink">
       <div className="pointer-events-none absolute -left-40 top-0 h-96 w-96 rounded-full bg-electric/10 blur-[120px]" />
       <div className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-violet/10 blur-[120px]" />
       <div className="pointer-events-none fixed inset-0 bg-blueprint [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />

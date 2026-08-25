@@ -1,8 +1,10 @@
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2, XCircle, AlertTriangle, Wrench, ArrowRight, Check } from 'lucide-react';
 import { useLabStore } from '../../store/labStore';
 import { GlowButton } from '../ui/GlowButton';
 import { LEVELS, evaluateLevel } from '../../data/levels';
+import { play } from '../../utils/sound';
 import { cn } from '../../utils/cn';
 
 export function TestReport() {
@@ -18,6 +20,11 @@ export function TestReport() {
   const level = LEVELS[currentLevel - 1] ?? LEVELS[0];
   const { criteria, passed } = evaluateLevel(level, report);
   const isLast = level.id === LEVELS.length;
+
+  useEffect(() => {
+    if (phase === 'report') play(passed ? 'pass' : 'fail');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase]);
 
   const rows = [
     { k: 'Uniformiteti', v: Math.round(report.uniformity) },
@@ -95,7 +102,21 @@ export function TestReport() {
         </div>
 
         <div className="mt-5 border-t border-white/10 pt-5">
-          <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-fog">
+          {/* success / failure animation */}
+          <div
+            className={cn(
+              'mx-auto flex size-14 items-center justify-center rounded-full border',
+              passed ? 'border-electric/50 bg-electric/10' : 'border-violet/50 bg-violet/10',
+            )}
+          >
+            {passed ? (
+              <CheckCircle2 className="size-7 animate-pop text-electric" />
+            ) : (
+              <XCircle className="size-7 animate-shake text-violet-bright" />
+            )}
+          </div>
+
+          <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.3em] text-fog">
             Rezultati total
           </div>
           <div

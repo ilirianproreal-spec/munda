@@ -4,6 +4,7 @@ import { PANEL, MATERIALS, FIBER_CONFIGS, FIBER_ANCHORS, MAX_LEDS } from '../../
 import { useLabStore } from '../../store/labStore';
 import { clamp, ledRadius, PANEL_PATH, strandPath, computeMetrics } from '../../utils/light';
 import { renderHeatmap, renderTestAnimation } from '../../utils/heatmap';
+import { play } from '../../utils/sound';
 import { cn } from '../../utils/cn';
 import type { Led } from '../../types';
 
@@ -32,6 +33,8 @@ export function DoorPanel() {
   const fib = FIBER_CONFIGS.find((f) => f.id === fiberConfig) ?? FIBER_CONFIGS[0];
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const testBarRef = useRef<HTMLDivElement | null>(null);
+  const testPctRef = useRef<HTMLSpanElement | null>(null);
   const [heatmapOn, setHeatmapOn] = useState(false);
 
   // recompute the light field whenever LEDs / material / visibility change
@@ -77,6 +80,12 @@ export function DoorPanel() {
     const loop = (now: number) => {
       const t = Math.min(1, (now - start) / DUR);
       renderTestAnimation(ctx, W, H, snapshotLeds, mat0.spread, M.viewW, M.viewH, t, anchors);
+      if (testBarRef.current) {
+        testBarRef.current.style.width = `${Math.round(t * 100)}%`;
+      }
+      if (testPctRef.current) {
+        testPctRef.current.textContent = `${Math.round(t * 100)}%`;
+      }
       if (t < 1) {
         raf = requestAnimationFrame(loop);
       } else {
@@ -115,6 +124,7 @@ export function DoorPanel() {
       return;
     }
     addLed(clamp(p.x, MARGIN, M.viewW - MARGIN), clamp(p.y, MARGIN, M.viewH - MARGIN));
+    play('led');
   };
 
   const onLedPointerDown = (e: RPointerEvent<SVGGElement>, led: Led) => {
@@ -148,7 +158,7 @@ export function DoorPanel() {
   };
 
   return (
-    <div className="glass p-4 sm:p-5">
+    <div className="glass p-4 shadow-[0_0_80px_-30px_rgba(0,229,255,0.35)] sm:p-5">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-fog">
           Paneli i derës
@@ -347,11 +357,21 @@ export function DoorPanel() {
                 onPointerMove={onLedPointerMove}
                 onPointerUp={onLedPointerUp}
                 onClick={(e) => e.stopPropagation()}
-                className="cursor-grab active:cursor-grabbing"
+                className="group cursor-grab active:cursor-grabbing"
                 style={{ touchAction: 'none' }}
               >
                 {/* hit area */}
                 <circle cx={led.x} cy={led.y} r={18} fill="transparent" />
+                {/* hover ring */}
+                <circle
+                  cx={led.x}
+                  cy={led.y}
+                  r={8}
+                  fill="none"
+                  stroke="rgba(125,247,255,0.55)"
+                  strokeWidth={1}
+                  className="opacity-0 transition-opacity duration-200 group-hover:opacity-70"
+                />
                 {/* selection ring */}
                 {selected && (
                   <circle
@@ -388,11 +408,21 @@ export function DoorPanel() {
           )}
         />
         {testPhase === 'running' && (
-          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-center">
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex flex-col items-center gap-2">
             <span className="mt-3 inline-flex items-center gap-2 border border-electric/50 bg-ink/80 px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.3em] text-electric backdrop-blur-sm">
               <span className="size-1.5 animate-pulse-dot rounded-full bg-electric" />
-              Testi në vazhdim · analiza e dritës
+              Testi në vazhdim
+              <span ref={testPctRef} className="text-electric-bright">
+                0%
+              </span>
             </span>
+            <div className="h-[2px] w-48 overflow-hidden rounded-full bg-white/10">
+              <div
+                ref={testBarRef}
+                className="h-full bg-gradient-to-r from-violet via-electric to-white"
+                style={{ width: '0%' }}
+              />
+            </div>
           </div>
         )}
       </div>

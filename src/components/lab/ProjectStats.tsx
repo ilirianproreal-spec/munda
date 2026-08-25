@@ -3,6 +3,7 @@ import { Play } from 'lucide-react';
 import { computeMetrics } from '../../utils/light';
 import { useLabStore } from '../../store/labStore';
 import { GlowButton } from '../ui/GlowButton';
+import { play } from '../../utils/sound';
 import { cn } from '../../utils/cn';
 
 const METRICS = [
@@ -97,7 +98,13 @@ export function ProjectStats() {
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-fog">
           Rezultati total
         </div>
-        <div className={cn('mt-2 font-display text-6xl font-extrabold leading-none', totalColor)}>
+        <div
+          className={cn(
+            'mt-2 font-display text-6xl font-extrabold leading-none',
+            totalColor,
+            m.total >= 80 && '[text-shadow:0_0_30px_rgba(0,229,255,0.45)]',
+          )}
+        >
           {Math.round(m.total)}
         </div>
         <div className="mt-4 h-1 overflow-hidden rounded-full bg-white/10">
@@ -113,7 +120,13 @@ export function ProjectStats() {
 
       {testPhase === 'idle' && (
         <div className="mt-6">
-          <GlowButton onClick={startTest} className="w-full">
+          <GlowButton
+            onClick={() => {
+              play('test');
+              startTest();
+            }}
+            className="w-full"
+          >
             <Play className="size-4 fill-current" />
             Fillo testin
           </GlowButton>

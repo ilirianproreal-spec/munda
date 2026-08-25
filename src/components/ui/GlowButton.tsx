@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { cn } from '../../utils/cn';
+import { play } from '../../utils/sound';
 
 interface GlowButtonProps {
   children: ReactNode;
@@ -40,19 +41,24 @@ export function GlowButton({
   if (to) {
     return (
       <motion.div whileHover={{ y: -1 }} whileTap={{ scale: 0.98 }} className={cn('inline-block', className)}>
-        <Link to={to} className={cn(base, styles[variant])}>
+        <Link to={to} onClick={() => play('click')} className={cn(base, styles[variant])}>
           {inner}
         </Link>
       </motion.div>
     );
   }
 
+  const handleClick = () => {
+    play('click');
+    onClick?.();
+  };
+
   return (
     <motion.button
       type="button"
       whileHover={{ y: -1 }}
       whileTap={{ scale: 0.98 }}
-      onClick={onClick}
+      onClick={handleClick}
       className={cn(base, styles[variant], className)}
     >
       {inner}

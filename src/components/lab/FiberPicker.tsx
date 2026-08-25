@@ -1,6 +1,7 @@
 import { Network } from 'lucide-react';
 import { FIBER_CONFIGS } from '../../data/lab';
 import { useLabStore } from '../../store/labStore';
+import { play } from '../../utils/sound';
 import { cn } from '../../utils/cn';
 
 export function FiberPicker() {
@@ -18,7 +19,10 @@ export function FiberPicker() {
           <button
             key={f.id}
             type="button"
-            onClick={() => setFiberConfig(f.id)}
+            onClick={() => {
+              setFiberConfig(f.id);
+              play('click');
+            }}
             className={cn(
               'flex w-full items-center justify-between gap-3 border px-3 py-2.5 text-left transition-colors duration-200',
               fiberConfig === f.id
