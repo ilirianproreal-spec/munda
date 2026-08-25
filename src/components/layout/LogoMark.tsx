@@ -15,15 +15,15 @@ export function LogoMark({ className }: { className?: string }) {
       />
       <path
         d="M15.5 13.5 24 22m9-8.5L24 22m0-12.5V22"
-        stroke="#ffb84d"
+        stroke="#00e5ff"
         strokeWidth="1.5"
         strokeLinecap="round"
       />
-      <circle cx="24" cy="22" r="3.2" fill="#ffb84d" />
-      <circle cx="24" cy="22" r="6.5" stroke="#ffb84d" strokeOpacity="0.35" strokeWidth="1" />
-      <circle cx="15.5" cy="13.5" r="1.5" fill="#3fe0ff" />
-      <circle cx="33" cy="13.5" r="1.5" fill="#3fe0ff" />
-      <circle cx="24" cy="9.5" r="1.5" fill="#3fe0ff" />
+      <circle cx="24" cy="22" r="3.2" fill="#00e5ff" />
+      <circle cx="24" cy="22" r="6.5" stroke="#00e5ff" strokeOpacity="0.35" strokeWidth="1" />
+      <circle cx="15.5" cy="13.5" r="1.5" fill="#8b5cf6" />
+      <circle cx="33" cy="13.5" r="1.5" fill="#8b5cf6" />
+      <circle cx="24" cy="9.5" r="1.5" fill="#8b5cf6" />
     </svg>
   );
 }

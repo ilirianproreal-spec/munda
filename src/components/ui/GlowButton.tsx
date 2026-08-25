@@ -7,7 +7,7 @@ interface GlowButtonProps {
   children: ReactNode;
   to?: string;
   onClick?: () => void;
-  variant?: 'primary' | 'ghost';
+  variant?: 'primary' | 'glass';
   className?: string;
 }
 
@@ -19,17 +19,19 @@ export function GlowButton({
   className,
 }: GlowButtonProps) {
   const base =
-    'group relative inline-flex items-center justify-center gap-3 overflow-hidden px-8 py-3.5 font-mono text-xs font-semibold uppercase tracking-[0.3em] transition-colors duration-300';
+    'group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-[2px] px-9 py-3.5 font-mono text-xs font-bold uppercase tracking-[0.3em] transition-all duration-300';
   const styles = {
-    primary: 'bg-light text-ink hover:bg-light-bright',
-    ghost: 'border border-line text-fog hover:border-light/50 hover:text-white',
+    primary:
+      'bg-electric text-ink shadow-[0_0_18px_rgba(0,229,255,0.35)] hover:bg-electric-bright hover:shadow-[0_0_36px_rgba(0,229,255,0.6)]',
+    glass:
+      'glass text-white/85 hover:border-electric/50 hover:bg-white/[0.07] hover:text-electric-bright',
   };
 
   const inner = (
     <>
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
+        className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
       />
       {children}
     </>

@@ -7,9 +7,9 @@ smart textile technology.
 ## Stack
 
 - React 19 + TypeScript + Vite
-- Tailwind CSS v4 (Vite plugin, `@theme` tokens)
+- Tailwind CSS v4 (Vite plugin, `@theme` tokens — electric cyan + violet on near-black)
 - Framer Motion (animations)
-- React Router (routes: `/` start screen, `/lab` lab core)
+- React Router (routes: `/` start screen, `/how` tutorial, `/lab` lab core)
 - Zustand (game state store)
 - HTML Canvas (light-particle field)
 

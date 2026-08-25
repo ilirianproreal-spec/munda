@@ -1,6 +1,25 @@
 import { useEffect, useRef } from 'react';
 
-type Kind = 'amber' | 'cyan';
+type StrandColor = 'electric' | 'violet';
+
+interface Pulse {
+  t: number;
+  speed: number;
+  size: number;
+}
+
+interface Strand {
+  p0x: number;
+  p0y: number;
+  p1x: number;
+  p1y: number;
+  p2x: number;
+  p2y: number;
+  p3x: number;
+  p3y: number;
+  color: StrandColor;
+  pulses: Pulse[];
+}
 
 interface Particle {
   x: number;
@@ -8,20 +27,25 @@ interface Particle {
   vx: number;
   vy: number;
   r: number;
-  kind: Kind;
   phase: number;
-  sway: number;
-  swaySpeed: number;
+  color: StrandColor;
 }
 
-const COLORS: Record<Kind, string> = {
-  amber: '255,184,77',
-  cyan: '63,224,255',
+const STRAND_RGBA: Record<StrandColor, { main: string; pulse: string }> = {
+  electric: { main: '0,229,255', pulse: '125,247,255' },
+  violet: { main: '139,92,246', pulse: '196,181,253' },
 };
 
+function bezierPoint(s: Strand, t: number): [number, number] {
+  const u = 1 - t;
+  const x = u * u * u * s.p0x + 3 * u * u * t * s.p1x + 3 * u * t * t * s.p2x + t * t * t * s.p3x;
+  const y = u * u * u * s.p0y + 3 * u * u * t * s.p1y + 3 * u * t * t * s.p2y + t * t * t * s.p3y;
+  return [x, y];
+}
+
 /**
- * Ambient light-particle field rendered on <canvas>.
- * Slow-drifting glowing particles linked by faint fiber-optic strands.
+ * Animated optical-fiber field on <canvas>: curved fiber strands with
+ * light pulses traveling along them, plus slow-drifting ambient particles.
  */
 export function LightField({ className }: { className?: string }) {
   const ref = useRef<HTMLCanvasElement | null>(null);
@@ -37,20 +61,46 @@ export function LightField({ className }: { className?: string }) {
     let w = 0;
     let h = 0;
     let raf = 0;
-    let t = 0;
+    let frame = 0;
+    let strands: Strand[] = [];
     let particles: Particle[] = [];
 
-    const spawn = (count: number) => {
-      particles = Array.from({ length: count }, () => ({
+    const makeStrands = (): Strand[] => {
+      const n = Math.max(5, Math.round(w / 260));
+      return Array.from({ length: n }, (_, i) => {
+        const color: StrandColor = i % 4 === 3 ? 'violet' : 'electric';
+        const y0 = h * (0.08 + (0.84 * i) / (n - 1)) + (Math.random() - 0.5) * h * 0.06;
+        const y1 = h * (0.12 + (0.76 * ((i + 2) % n)) / (n - 1)) + (Math.random() - 0.5) * h * 0.06;
+        const drift = (Math.random() - 0.5) * h * 0.4;
+        return {
+          p0x: -w * 0.08,
+          p0y: y0,
+          p1x: w * 0.32,
+          p1y: y0 + drift,
+          p2x: w * 0.68,
+          p2y: y1 - drift,
+          p3x: w * 1.08,
+          p3y: y1,
+          color,
+          pulses: Array.from({ length: 2 + Math.floor(Math.random() * 2) }, () => ({
+            t: Math.random(),
+            speed: 0.004 + Math.random() * 0.005,
+            size: 2 + Math.random() * 2.5,
+          })),
+        };
+      });
+    };
+
+    const spawnParticles = () => {
+      const count = Math.round((w * h) / 22000);
+      particles = Array.from({ length: Math.min(55, Math.max(24, count)) }, () => ({
         x: Math.random() * w,
         y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 8,
-        vy: -6 - Math.random() * 10,
-        r: 0.6 + Math.random() * 1.7,
-        kind: Math.random() < 0.72 ? 'amber' : 'cyan',
+        vx: (Math.random() - 0.5) * 6,
+        vy: -4 - Math.random() * 6,
+        r: 0.5 + Math.random() * 1.3,
         phase: Math.random() * Math.PI * 2,
-        sway: 8 + Math.random() * 26,
-        swaySpeed: 0.2 + Math.random() * 0.5,
+        color: Math.random() < 0.75 ? 'electric' : 'violet',
       }));
     };
 
@@ -61,60 +111,68 @@ export function LightField({ className }: { className?: string }) {
       canvas.width = Math.max(1, Math.round(w * dpr));
       canvas.height = Math.max(1, Math.round(h * dpr));
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const count = Math.round((w * h) / 16000);
-      spawn(Math.min(90, Math.max(34, count)));
+      strands = makeStrands();
+      spawnParticles();
     };
 
     const draw = () => {
+      frame += 1;
       ctx.clearRect(0, 0, w, h);
-      t += 0.008;
 
-      // fiber-optic links between nearby particles
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const a = particles[i];
-          const b = particles[j];
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
-          const d2 = dx * dx + dy * dy;
-          if (d2 < 12100) {
-            const alpha = (1 - d2 / 12100) * 0.16;
-            ctx.strokeStyle = `rgba(${COLORS[a.kind]},${alpha})`;
-            ctx.lineWidth = 0.6;
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.stroke();
-          }
+      // fiber strands + traveling light pulses
+      for (const s of strands) {
+        const rgba = STRAND_RGBA[s.color].main;
+        ctx.strokeStyle = `rgba(${rgba},0.14)`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(s.p0x, s.p0y);
+        ctx.bezierCurveTo(s.p1x, s.p1y, s.p2x, s.p2y, s.p3x, s.p3y);
+        ctx.stroke();
+
+        ctx.strokeStyle = `rgba(${rgba},0.3)`;
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(s.p0x, s.p0y);
+        ctx.bezierCurveTo(s.p1x, s.p1y, s.p2x, s.p2y, s.p3x, s.p3y);
+        ctx.stroke();
+
+        for (const p of s.pulses) {
+          p.t += p.speed;
+          if (p.t > 1.05) p.t = -0.05;
+          const [x, y] = bezierPoint(s, Math.max(0, Math.min(1, p.t)));
+          const prgba = STRAND_RGBA[s.color].pulse;
+          const g = ctx.createRadialGradient(x, y, 0, x, y, p.size * 4);
+          g.addColorStop(0, `rgba(${prgba},0.95)`);
+          g.addColorStop(0.25, `rgba(${prgba},0.45)`);
+          g.addColorStop(1, `rgba(${prgba},0)`);
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(x, y, p.size * 4, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = `rgba(${prgba},1)`;
+          ctx.beginPath();
+          ctx.arc(x, y, 1.1, 0, Math.PI * 2);
+          ctx.fill();
         }
       }
 
-      for (const p of particles) {
-        const swayX = Math.sin(t * p.swaySpeed * 10 + p.phase) * p.sway;
-        p.x += p.vx * 0.02;
-        p.y += p.vy * 0.02;
-        if (p.y < -12) {
-          p.y = h + 12;
-          p.x = Math.random() * w;
+      // ambient particles
+      for (const pt of particles) {
+        const swayX = Math.sin(frame * 0.02 * pt.phase + pt.phase) * 6;
+        pt.x += pt.vx * 0.02;
+        pt.y += pt.vy * 0.02;
+        if (pt.y < -10) {
+          pt.y = h + 10;
+          pt.x = Math.random() * w;
         }
-        if (p.x < -24) p.x = w + 24;
-        if (p.x > w + 24) p.x = -24;
+        if (pt.x < -20) pt.x = w + 20;
+        if (pt.x > w + 20) pt.x = -20;
 
-        const x = p.x + swayX;
-        const c = COLORS[p.kind];
+        ctx.fillStyle = `rgba(${STRAND_RGBA[pt.color].main},0.55)`;
         ctx.beginPath();
-        ctx.arc(x, p.y, p.r, 0, Math.PI * 2);
-        if (p.kind === 'amber') {
-          ctx.shadowColor = 'rgba(255,184,77,0.9)';
-          ctx.shadowBlur = 10;
-          ctx.fillStyle = `rgba(${c},0.85)`;
-        } else {
-          ctx.shadowColor = 'rgba(63,224,255,0.9)';
-          ctx.shadowBlur = 8;
-          ctx.fillStyle = `rgba(${c},0.7)`;
-        }
+        ctx.arc(pt.x + swayX, pt.y, pt.r, 0, Math.PI * 2);
         ctx.fill();
-        ctx.shadowBlur = 0;
       }
     };
 

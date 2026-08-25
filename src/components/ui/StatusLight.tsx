@@ -1,14 +1,14 @@
 import { cn } from '../../utils/cn';
 
 const TONES = {
-  amber: 'bg-light animate-pulse-dot',
-  cyan: 'bg-fiber animate-pulse-dot-cyan',
+  electric: 'bg-electric animate-pulse-dot',
+  violet: 'bg-violet animate-pulse-dot-violet',
   muted: 'bg-fog/40',
 } as const;
 
 export function StatusLight({
   label,
-  tone = 'amber',
+  tone = 'electric',
   className,
 }: {
   label: string;
