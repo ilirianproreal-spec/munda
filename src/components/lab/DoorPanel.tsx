@@ -2,33 +2,16 @@ import { useEffect, useRef, useState } from 'react';
 import type { PointerEvent as RPointerEvent, MouseEvent as RMouseEvent } from 'react';
 import { PANEL, MATERIALS, FIBER_CONFIGS, FIBER_ANCHORS, MAX_LEDS } from '../../data/lab';
 import { useLabStore } from '../../store/labStore';
-import { clamp, ledRadius } from '../../utils/light';
-import { renderHeatmap } from '../../utils/heatmap';
+import { clamp, ledRadius, PANEL_PATH, strandPath, computeMetrics } from '../../utils/light';
+import { renderHeatmap, renderTestAnimation } from '../../utils/heatmap';
 import { cn } from '../../utils/cn';
 import type { Led } from '../../types';
 
 const M = PANEL;
 const MARGIN = 26;
 
-const PANEL_PATH =
-  'M 84 20 L 316 20 Q 340 20 340 44 L 340 604 Q 340 628 316 628 L 84 628 Q 60 628 60 604 L 60 44 Q 60 20 84 20 Z';
-
 const STITCH_PATH =
   'M 90 26 L 310 26 Q 334 26 334 50 L 334 598 Q 334 622 310 622 L 90 622 Q 66 622 66 598 L 66 50 Q 66 26 90 26 Z';
-
-function strandPath(led: Led, a: { x: number; y: number }) {
-  const dx = a.x - led.x;
-  const dy = a.y - led.y;
-  const len = Math.max(1, Math.hypot(dx, dy));
-  const nx = -dy / len;
-  const ny = dx / len;
-  const bend = 14 + len * 0.12;
-  const c1x = led.x + dx * 0.35 + nx * bend;
-  const c1y = led.y + dy * 0.35 + ny * bend;
-  const c2x = a.x - dx * 0.35 + nx * bend;
-  const c2y = a.y - dy * 0.35 + ny * bend;
-  return `M ${led.x} ${led.y} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${a.x} ${a.y}`;
-}
 
 export function DoorPanel() {
   const leds = useLabStore((s) => s.leds);
@@ -38,6 +21,8 @@ export function DoorPanel() {
   const addLed = useLabStore((s) => s.addLed);
   const moveLed = useLabStore((s) => s.moveLed);
   const selectLed = useLabStore((s) => s.selectLed);
+  const testPhase = useLabStore((s) => s.testPhase);
+  const finishTest = useLabStore((s) => s.finishTest);
 
   const svgRef = useRef<SVGSVGElement | null>(null);
   const dragRef = useRef<{ id: string; dx: number; dy: number } | null>(null);
@@ -63,7 +48,50 @@ export function DoorPanel() {
     if (heatmapOn) {
       renderHeatmap(ctx, W, H, leds, mat.spread, M.viewW, M.viewH);
     }
-  }, [leds, material, heatmapOn]);
+  }, [leds, material, heatmapOn, testPhase]);
+
+  // validation test: run the light animation, then finish with a computed report
+  useEffect(() => {
+    if (testPhase !== 'running') return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const W = 200;
+    const H = 320;
+    canvas.width = W;
+    canvas.height = H;
+
+    const snapshotLeds = useLabStore.getState().leds;
+    const snapshotMaterial = useLabStore.getState().material;
+    const snapshotFiber = useLabStore.getState().fiberConfig;
+    const mat0 = MATERIALS.find((m) => m.id === snapshotMaterial) ?? MATERIALS[0];
+    const fib0 = FIBER_CONFIGS.find((f) => f.id === snapshotFiber) ?? FIBER_CONFIGS[0];
+    const anchors = fib0.anchors.map((a) => FIBER_ANCHORS[a]);
+
+    const DUR = 4800;
+    let raf = 0;
+    let timer = 0;
+    const start = performance.now();
+
+    const loop = (now: number) => {
+      const t = Math.min(1, (now - start) / DUR);
+      renderTestAnimation(ctx, W, H, snapshotLeds, mat0.spread, M.viewW, M.viewH, t, anchors);
+      if (t < 1) {
+        raf = requestAnimationFrame(loop);
+      } else {
+        timer = window.setTimeout(() => {
+          finishTest(computeMetrics(snapshotLeds, snapshotMaterial, snapshotFiber));
+        }, 1200);
+      }
+    };
+    raf = requestAnimationFrame(loop);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      if (timer) window.clearTimeout(timer);
+    };
+  }, [testPhase, finishTest]);
 
   const toPanel = (e: RPointerEvent | RMouseEvent) => {
     const svg = svgRef.current;
@@ -76,6 +104,7 @@ export function DoorPanel() {
   };
 
   const handlePanelClick = (e: RMouseEvent<SVGRectElement>) => {
+    if (testPhase !== 'idle') return;
     if (movedRef.current) {
       movedRef.current = false;
       return;
@@ -89,6 +118,7 @@ export function DoorPanel() {
   };
 
   const onLedPointerDown = (e: RPointerEvent<SVGGElement>, led: Led) => {
+    if (testPhase !== 'idle') return;
     e.stopPropagation();
     selectLed(led.id);
     const p = toPanel(e);
@@ -354,9 +384,17 @@ export function DoorPanel() {
           aria-hidden="true"
           className={cn(
             'pointer-events-none absolute inset-0 h-full w-full mix-blend-screen transition-opacity duration-500',
-            heatmapOn ? 'opacity-100' : 'opacity-0',
+            heatmapOn || testPhase !== 'idle' ? 'opacity-100' : 'opacity-0',
           )}
         />
+        {testPhase === 'running' && (
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-center">
+            <span className="mt-3 inline-flex items-center gap-2 border border-electric/50 bg-ink/80 px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.3em] text-electric backdrop-blur-sm">
+              <span className="size-1.5 animate-pulse-dot rounded-full bg-electric" />
+              Testi në vazhdim · analiza e dritës
+            </span>
+          </div>
+        )}
       </div>
 
       {heatmapOn && (

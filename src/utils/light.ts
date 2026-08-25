@@ -42,6 +42,40 @@ export function ledRadius(led: Led, spread: number): number {
   return 58 * spread * (0.5 + 0.7 * (led.intensity / 100));
 }
 
+export const PANEL_PATH =
+  'M 84 20 L 316 20 Q 340 20 340 44 L 340 604 Q 340 628 316 628 L 84 628 Q 60 628 60 604 L 60 44 Q 60 20 84 20 Z';
+
+function strandControls(led: Led, ax: number, ay: number) {
+  const dx = ax - led.x;
+  const dy = ay - led.y;
+  const len = Math.max(1, Math.hypot(dx, dy));
+  const nx = -dy / len;
+  const ny = dx / len;
+  const bend = 14 + len * 0.12;
+  return {
+    c1x: led.x + dx * 0.35 + nx * bend,
+    c1y: led.y + dy * 0.35 + ny * bend,
+    c2x: ax - dx * 0.35 + nx * bend,
+    c2y: ay - dy * 0.35 + ny * bend,
+  };
+}
+
+/** Cubic-bezier fiber strand from an LED to an anchor point. */
+export function strandPath(led: Led, a: { x: number; y: number }) {
+  const { c1x, c1y, c2x, c2y } = strandControls(led, a.x, a.y);
+  return `M ${led.x} ${led.y} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${a.x} ${a.y}`;
+}
+
+/** Point along the strand at parameter t (0..1). */
+export function strandPoint(led: Led, ax: number, ay: number, t: number): [number, number] {
+  const { c1x, c1y, c2x, c2y } = strandControls(led, ax, ay);
+  const u = 1 - t;
+  return [
+    u * u * u * led.x + 3 * u * u * t * c1x + 3 * u * t * t * c2x + t * t * t * ax,
+    u * u * u * led.y + 3 * u * u * t * c1y + 3 * u * t * t * c2y + t * t * t * ay,
+  ];
+}
+
 const FIBER_PENALTY: Record<FiberConfigId, number> = {
   off: 0,
   linear: 6,

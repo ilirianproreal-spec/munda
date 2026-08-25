@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
+import { Play } from 'lucide-react';
 import { computeMetrics } from '../../utils/light';
 import { useLabStore } from '../../store/labStore';
+import { GlowButton } from '../ui/GlowButton';
 import { cn } from '../../utils/cn';
 
 const METRICS = [
@@ -45,6 +47,9 @@ export function ProjectStats() {
     () => computeMetrics(leds, material, fiberConfig),
     [leds, material, fiberConfig],
   );
+
+  const testPhase = useLabStore((s) => s.testPhase);
+  const startTest = useLabStore((s) => s.startTest);
 
   const totalColor =
     m.total >= 80
@@ -105,6 +110,15 @@ export function ProjectStats() {
           U 30% · E 20% · K 20% · D 15% · P 15%
         </div>
       </div>
+
+      {testPhase === 'idle' && (
+        <div className="mt-6">
+          <GlowButton onClick={startTest} className="w-full">
+            <Play className="size-4 fill-current" />
+            Fillo testin
+          </GlowButton>
+        </div>
+      )}
     </aside>
   );
 }

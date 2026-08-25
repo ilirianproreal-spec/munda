@@ -1,5 +1,5 @@
 import type { Led } from '../types';
-import { insidePanel, ledRadius } from './light';
+import { insidePanel, ledRadius, PANEL_PATH, strandPath, strandPoint } from './light';
 
 /**
  * Gameplay light simulation: every LED contributes a smooth falloff field
@@ -44,6 +44,13 @@ function buildLut(): Uint8ClampedArray {
 
 const LUT = buildLut();
 
+export interface HeatmapOpts {
+  /** scales the summed light value before color mapping (dimming) */
+  valueScale?: number;
+  /** multiplies every LED's falloff radius (diffusion) */
+  radiusMul?: number;
+}
+
 export function renderHeatmap(
   ctx: CanvasRenderingContext2D,
   w: number,
@@ -52,7 +59,10 @@ export function renderHeatmap(
   spread: number,
   panelW: number,
   panelH: number,
+  opts: HeatmapOpts = {},
 ) {
+  const valueScale = opts.valueScale ?? 1;
+  const radiusMul = opts.radiusMul ?? 1;
   const img = ctx.createImageData(w, h);
   const data = img.data;
 
@@ -65,7 +75,7 @@ export function renderHeatmap(
 
       let v = 0;
       for (const led of leds) {
-        const R = ledRadius(led, spread);
+        const R = ledRadius(led, spread) * radiusMul;
         const dx = x - led.x;
         const dy = y - led.y;
         const d = Math.hypot(dx, dy);
@@ -76,7 +86,7 @@ export function renderHeatmap(
       }
       if (v <= 0.004) continue;
 
-      const n = Math.min(1, v);
+      const n = Math.min(1, Math.min(1, v) * valueScale);
       const li = Math.round(n * 255);
       data[idx] = LUT[li * 3];
       data[idx + 1] = LUT[li * 3 + 1];
@@ -86,4 +96,86 @@ export function renderHeatmap(
   }
 
   ctx.putImageData(img, 0, 0);
+}
+
+/**
+ * Validation animation, driven by progress t in [0, 1]:
+ * 0.00–0.30  light pulses travel from each LED along the fiber strands
+ * 0.30–0.65  light spreads through the textile (growing glow fields)
+ * 0.65–1.00  the whole panel brightens, then settles on the real design
+ */
+export function renderTestAnimation(
+  ctx: CanvasRenderingContext2D,
+  w: number,
+  h: number,
+  leds: Led[],
+  spread: number,
+  panelW: number,
+  panelH: number,
+  t: number,
+  anchors: Array<{ x: number; y: number }>,
+) {
+  const PULSE_END = 0.3;
+  const SPREAD_END = 0.65;
+
+  ctx.clearRect(0, 0, w, h);
+
+  const drawClipped = (fn: () => void) => {
+    ctx.save();
+    ctx.setTransform(w / panelW, 0, 0, h / panelH, 0, 0);
+    ctx.clip(new Path2D(PANEL_PATH));
+    fn();
+    ctx.restore();
+  };
+
+  if (t < PULSE_END) {
+    // dim real field + light pulses shooting through the fibers
+    renderHeatmap(ctx, w, h, leds, spread, panelW, panelH, { valueScale: 0.4 });
+    if (anchors.length > 0) {
+      const p = t / PULSE_END;
+      drawClipped(() => {
+        for (const led of leds) {
+          anchors.forEach((a, i) => {
+            ctx.strokeStyle = 'rgba(125,247,255,0.16)';
+            ctx.lineWidth = 1;
+            ctx.stroke(new Path2D(strandPath(led, a)));
+            for (let k = 0; k < 2; k++) {
+              const pp = (p * 1.3 + i * 0.23 + k * 0.5) % 1;
+              const [px, py] = strandPoint(led, a.x, a.y, pp);
+              const g = ctx.createRadialGradient(px, py, 0, px, py, 7);
+              g.addColorStop(0, 'rgba(255,255,255,0.95)');
+              g.addColorStop(0.4, 'rgba(125,247,255,0.5)');
+              g.addColorStop(1, 'rgba(125,247,255,0)');
+              ctx.fillStyle = g;
+              ctx.beginPath();
+              ctx.arc(px, py, 7, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          });
+        }
+      });
+    }
+    return;
+  }
+
+  if (t < SPREAD_END) {
+    // light diffusing through the textile: fields grow and brighten
+    const k = (t - PULSE_END) / (SPREAD_END - PULSE_END);
+    renderHeatmap(ctx, w, h, leds, spread, panelW, panelH, {
+      valueScale: 0.7 + 0.6 * k,
+      radiusMul: 1 + 0.8 * k,
+    });
+    return;
+  }
+
+  // whole panel illuminates, then settles on the true design field
+  const w2 = (t - SPREAD_END) / (1 - SPREAD_END);
+  renderHeatmap(ctx, w, h, leds, spread, panelW, panelH);
+  if (w2 < 1) {
+    const alpha = (1 - w2) * 0.75;
+    drawClipped(() => {
+      ctx.fillStyle = `rgba(255,255,255,${alpha.toFixed(3)})`;
+      ctx.fillRect(0, 0, panelW, panelH);
+    });
+  }
 }

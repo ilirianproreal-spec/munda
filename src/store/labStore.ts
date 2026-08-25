@@ -2,14 +2,19 @@ import { create } from 'zustand';
 import type { Led, MaterialId, FiberConfigId } from '../types';
 import { MAX_LEDS, PANEL } from '../data/lab';
 import { clamp } from '../utils/light';
+import type { LabMetrics } from '../utils/light';
 
 const MARGIN = 26;
+
+export type TestPhase = 'idle' | 'running' | 'report';
 
 interface LabState {
   leds: Led[];
   selectedLedId: string | null;
   material: MaterialId;
   fiberConfig: FiberConfigId;
+  testPhase: TestPhase;
+  report: LabMetrics | null;
   addLed: (x: number, y: number) => void;
   moveLed: (id: string, x: number, y: number) => void;
   removeLed: (id: string) => void;
@@ -17,6 +22,9 @@ interface LabState {
   updateLed: (id: string, patch: Partial<Pick<Led, 'intensity' | 'color'>>) => void;
   setMaterial: (m: MaterialId) => void;
   setFiberConfig: (f: FiberConfigId) => void;
+  startTest: () => void;
+  finishTest: (m: LabMetrics) => void;
+  exitTest: () => void;
 }
 
 let ledSeq = 2;
@@ -27,6 +35,8 @@ export const useLabStore = create<LabState>((set) => ({
   selectedLedId: 'led-1',
   material: 'textile',
   fiberConfig: 'distributed',
+  testPhase: 'idle',
+  report: null,
 
   addLed: (x, y) =>
     set((s) => {
@@ -69,4 +79,8 @@ export const useLabStore = create<LabState>((set) => ({
 
   setMaterial: (m) => set({ material: m }),
   setFiberConfig: (f) => set({ fiberConfig: f }),
+
+  startTest: () => set({ testPhase: 'running', report: null }),
+  finishTest: (m) => set({ testPhase: 'report', report: m }),
+  exitTest: () => set({ testPhase: 'idle', report: null }),
 }));

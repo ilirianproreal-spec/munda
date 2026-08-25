@@ -4,11 +4,14 @@ import { LedControls } from '../components/lab/LedControls';
 import { MaterialPicker } from '../components/lab/MaterialPicker';
 import { FiberPicker } from '../components/lab/FiberPicker';
 import { ProjectStats } from '../components/lab/ProjectStats';
+import { TestReport } from '../components/lab/TestReport';
 import { MAX_LEDS } from '../data/lab';
 import { useLabStore } from '../store/labStore';
+import { cn } from '../utils/cn';
 
 export function DesignLabScreen() {
   const ledCount = useLabStore((s) => s.leds.length);
+  const testPhase = useLabStore((s) => s.testPhase);
 
   return (
     <div className="relative min-h-screen bg-ink">
@@ -40,7 +43,12 @@ export function DesignLabScreen() {
           </div>
         </header>
 
-        <div className="grid items-start gap-5 lg:grid-cols-[300px_minmax(0,1fr)_280px]">
+        <div
+          className={cn(
+            'grid items-start gap-5 transition-opacity duration-300 lg:grid-cols-[300px_minmax(0,1fr)_280px]',
+            testPhase === 'running' && 'pointer-events-none opacity-50',
+          )}
+        >
           <div className="space-y-5">
             <LedControls />
             <MaterialPicker />
@@ -49,6 +57,8 @@ export function DesignLabScreen() {
           <DoorPanel />
           <ProjectStats />
         </div>
+
+        <TestReport />
       </main>
     </div>
   );
