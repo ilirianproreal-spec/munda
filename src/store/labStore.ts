@@ -15,6 +15,8 @@ interface LabState {
   fiberConfig: FiberConfigId;
   testPhase: TestPhase;
   report: LabMetrics | null;
+  currentLevel: number;
+  completedLevels: number[];
   addLed: (x: number, y: number) => void;
   moveLed: (id: string, x: number, y: number) => void;
   removeLed: (id: string) => void;
@@ -25,10 +27,19 @@ interface LabState {
   startTest: () => void;
   finishTest: (m: LabMetrics) => void;
   exitTest: () => void;
+  setLevel: (n: number) => void;
+  completeLevel: (n: number) => void;
 }
 
 let ledSeq = 2;
 const newId = () => `led-${ledSeq++}`;
+
+const DEFAULT_DESIGN = {
+  leds: [{ id: 'led-1', x: 200, y: 300, intensity: 65, color: '#00e5ff' }],
+  selectedLedId: 'led-1',
+  material: 'textile' as MaterialId,
+  fiberConfig: 'distributed' as FiberConfigId,
+};
 
 export const useLabStore = create<LabState>((set) => ({
   leds: [{ id: 'led-1', x: 200, y: 300, intensity: 65, color: '#00e5ff' }],
@@ -37,6 +48,8 @@ export const useLabStore = create<LabState>((set) => ({
   fiberConfig: 'distributed',
   testPhase: 'idle',
   report: null,
+  currentLevel: 1,
+  completedLevels: [],
 
   addLed: (x, y) =>
     set((s) => {
@@ -83,4 +96,19 @@ export const useLabStore = create<LabState>((set) => ({
   startTest: () => set({ testPhase: 'running', report: null }),
   finishTest: (m) => set({ testPhase: 'report', report: m }),
   exitTest: () => set({ testPhase: 'idle', report: null }),
+
+  setLevel: (n) =>
+    set({
+      currentLevel: n,
+      ...DEFAULT_DESIGN,
+      testPhase: 'idle',
+      report: null,
+    }),
+
+  completeLevel: (n) =>
+    set((s) => ({
+      completedLevels: s.completedLevels.includes(n)
+        ? s.completedLevels
+        : [...s.completedLevels, n],
+    })),
 }));

@@ -8,6 +8,11 @@ export interface LabMetrics {
   design: number; // 0..100
   manufacturability: number; // 0..100
   total: number; // 0..100 (weighted)
+  /* raw values used by level criteria */
+  ledCount: number;
+  powerW: number;
+  costEur: number;
+  coverage: number; // 0..1
 }
 
 export const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
@@ -39,7 +44,7 @@ export function insidePanel(x: number, y: number): boolean {
 
 /** Glow radius of an LED on the panel, in viewBox units. */
 export function ledRadius(led: Led, spread: number): number {
-  return 58 * spread * (0.5 + 0.7 * (led.intensity / 100));
+  return 80 * spread * (0.5 + 0.7 * (led.intensity / 100));
 }
 
 export const PANEL_PATH =
@@ -127,19 +132,9 @@ export function computeMetrics(
   const sampleCount = values.length;
   const coverage = sampleCount === 0 ? 0 : lit / sampleCount;
 
-  // uniformity: how evenly light spreads across the lit region,
-  // scaled by how much of the panel is actually lit
-  const litValues = values.filter((v) => v > 0.02);
-  const litCount = litValues.length;
-  let evenness = 0;
-  if (litCount > 1) {
-    const litMean = litValues.reduce((a, b) => a + b, 0) / litCount;
-    const litSd = Math.sqrt(
-      litValues.reduce((a, b) => a + (b - litMean) ** 2, 0) / litCount,
-    );
-    evenness = 100 * Math.max(0, 1 - litSd / litMean);
-  }
-  const uniformity = clamp(coverage * evenness * 1.5, 0, 100);
+  // uniformity: coverage-driven curve (calibrated so 3 well-placed
+  // max-intensity LEDs on textile reach ~90%, and 1 LED sits ~30%)
+  const uniformity = clamp(100 * Math.pow(coverage, 0.85) * 1.45, 0, 100);
 
   /* — raw engineering values — */
   const totalLumens = leds.reduce((s, l) => s + 420 * (0.2 + 0.8 * (l.intensity / 100)), 0);
@@ -147,8 +142,8 @@ export function computeMetrics(
   const costEur = leds.length * 5.9 + mat.cost + fib.cost;
 
   /* — metric scores — */
-  const energy = clamp((totalLumens / Math.max(0.1, powerW)) / 180, 0, 1) * 100;
-  const cost = clamp((130 - costEur) / 112, 0, 1) * 100;
+  const energy = clamp((totalLumens / Math.max(0.1, powerW)) / 185, 0, 1) * 100;
+  const cost = clamp((160 - costEur) / 130, 0, 1) * 100;
   const design = clamp(0.55 * coverage * 100 + 0.45 * uniformity, 0, 100);
   const manufacturability = clamp(
     100 - Math.max(0, leds.length - 4) * 4 - FIBER_PENALTY[fiber] - MATERIAL_PENALTY[material],
@@ -162,5 +157,16 @@ export function computeMetrics(
     100,
   );
 
-  return { uniformity, energy, cost, design, manufacturability, total };
+  return {
+    uniformity,
+    energy,
+    cost,
+    design,
+    manufacturability,
+    total,
+    ledCount: leds.length,
+    powerW,
+    costEur,
+    coverage,
+  };
 }
