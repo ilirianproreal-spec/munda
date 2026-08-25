@@ -1,41 +1,63 @@
 import { useMemo } from 'react';
-import { computeStats } from '../../utils/light';
+import { computeMetrics } from '../../utils/light';
 import { useLabStore } from '../../store/labStore';
 import { cn } from '../../utils/cn';
+
+const METRICS = [
+  {
+    key: 'uniformity',
+    label: 'Uniformiteti i dritës',
+    text: 'text-electric',
+    bar: 'bg-electric',
+  },
+  {
+    key: 'energy',
+    label: 'Efikasiteti i energjisë',
+    text: 'text-electric-bright',
+    bar: 'bg-electric-bright',
+  },
+  {
+    key: 'cost',
+    label: 'Kostoja e prodhimit',
+    text: 'text-violet-bright',
+    bar: 'bg-violet',
+  },
+  {
+    key: 'design',
+    label: 'Cilësia e dizajnit',
+    text: 'text-violet-bright',
+    bar: 'bg-violet-bright',
+  },
+  {
+    key: 'manufacturability',
+    label: 'Mundësia e prodhimit',
+    text: 'text-white',
+    bar: 'bg-white/70',
+  },
+] as const;
 
 export function ProjectStats() {
   const leds = useLabStore((s) => s.leds);
   const material = useLabStore((s) => s.material);
   const fiberConfig = useLabStore((s) => s.fiberConfig);
 
-  const stats = useMemo(
-    () => computeStats(leds, material, fiberConfig),
+  const m = useMemo(
+    () => computeMetrics(leds, material, fiberConfig),
     [leds, material, fiberConfig],
   );
 
-  const rows = [
-    { k: 'LED-ët', v: String(stats.ledCount) },
-    { k: 'Drita totale', v: `${Math.round(stats.totalLumens)} lm` },
-    { k: 'Energjia', v: `${stats.powerW.toFixed(1)} W` },
-    { k: 'Kosto', v: `${stats.costEur.toFixed(1)} €` },
-  ];
-
-  const gradeColor =
-    stats.grade === 'A'
+  const totalColor =
+    m.total >= 80
       ? 'text-electric'
-      : stats.grade === 'B'
+      : m.total >= 60
         ? 'text-electric-bright'
-        : stats.grade === 'C'
+        : m.total >= 40
           ? 'text-violet-bright'
-          : stats.grade === 'D'
-            ? 'text-violet'
-            : 'text-fog';
-
-  const coveragePct = Math.round(stats.coverage * 100);
+          : 'text-fog';
 
   return (
     <aside className="glass p-5">
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-5 flex items-center justify-between">
         <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-fog">
           Statistikat e projektit
         </span>
@@ -45,42 +67,43 @@ export function ProjectStats() {
         </span>
       </div>
 
-      <ul className="space-y-3">
-        {rows.map((r) => (
-          <li
-            key={r.k}
-            className="flex items-baseline justify-between gap-4 border-b border-white/5 pb-3"
-          >
-            <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-fog">{r.k}</span>
-            <span className="font-mono text-sm text-white">{r.v}</span>
+      <ul className="space-y-4">
+        {METRICS.map((mt) => (
+          <li key={mt.key}>
+            <div className="mb-1.5 flex items-baseline justify-between gap-3">
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-fog">
+                {mt.label}
+              </span>
+              <span className={cn('font-mono text-xs', mt.text)}>
+                {Math.round(m[mt.key])}%
+              </span>
+            </div>
+            <div className="h-1 overflow-hidden rounded-full bg-white/10">
+              <div
+                className={cn('h-full rounded-full transition-all duration-500', mt.bar)}
+                style={{ width: `${m[mt.key]}%` }}
+              />
+            </div>
           </li>
         ))}
       </ul>
 
-      <div className="mt-4">
-        <div className="mb-2 flex items-baseline justify-between">
-          <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-fog">
-            Mbulueshmëria
-          </span>
-          <span className="font-mono text-sm text-white">{coveragePct}%</span>
+      <div className="mt-6 border-t border-white/10 pt-5 text-center">
+        <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-fog">
+          Rezultati total
         </div>
-        <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+        <div className={cn('mt-2 font-display text-6xl font-extrabold leading-none', totalColor)}>
+          {Math.round(m.total)}
+        </div>
+        <div className="mt-4 h-1 overflow-hidden rounded-full bg-white/10">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-electric to-violet transition-all duration-500"
-            style={{ width: `${coveragePct}%` }}
+            className="h-full rounded-full bg-gradient-to-r from-violet via-electric to-white transition-all duration-500"
+            style={{ width: `${m.total}%` }}
           />
         </div>
-        <div className="mt-2 flex justify-between font-mono text-[9px] uppercase tracking-[0.2em] text-fog/60">
-          <span>Objektivi 75%</span>
-          <span>{stats.ledCount > 0 ? 'Aktiv' : 'Shto LED'}</span>
+        <div className="mt-2 font-mono text-[9px] uppercase tracking-[0.2em] text-fog/60">
+          U 30% · E 20% · K 20% · D 15% · P 15%
         </div>
-      </div>
-
-      <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4">
-        <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-fog">
-          Vlerësimi
-        </span>
-        <span className={cn('font-display text-3xl font-extrabold', gradeColor)}>{stats.grade}</span>
       </div>
     </aside>
   );

@@ -1,8 +1,10 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { PointerEvent as RPointerEvent, MouseEvent as RMouseEvent } from 'react';
 import { PANEL, MATERIALS, FIBER_CONFIGS, FIBER_ANCHORS, MAX_LEDS } from '../../data/lab';
 import { useLabStore } from '../../store/labStore';
 import { clamp, ledRadius } from '../../utils/light';
+import { renderHeatmap } from '../../utils/heatmap';
+import { cn } from '../../utils/cn';
 import type { Led } from '../../types';
 
 const M = PANEL;
@@ -43,6 +45,25 @@ export function DoorPanel() {
 
   const mat = MATERIALS.find((m) => m.id === material) ?? MATERIALS[0];
   const fib = FIBER_CONFIGS.find((f) => f.id === fiberConfig) ?? FIBER_CONFIGS[0];
+
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [heatmapOn, setHeatmapOn] = useState(false);
+
+  // recompute the light field whenever LEDs / material / visibility change
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const W = 200;
+    const H = 320;
+    canvas.width = W;
+    canvas.height = H;
+    ctx.clearRect(0, 0, W, H);
+    if (heatmapOn) {
+      renderHeatmap(ctx, W, H, leds, mat.spread, M.viewW, M.viewH);
+    }
+  }, [leds, material, heatmapOn]);
 
   const toPanel = (e: RPointerEvent | RMouseEvent) => {
     const svg = svgRef.current;
@@ -98,12 +119,30 @@ export function DoorPanel() {
 
   return (
     <div className="glass p-4 sm:p-5">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-fog">
-        <span>Paneli i derës</span>
-        <span className="text-electric/80">Kliko: shto LED · Zvarrit: lëviz</span>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+        <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-fog">
+          Paneli i derës
+        </span>
+        <div className="flex items-center gap-3">
+          <span className="hidden font-mono text-[10px] uppercase tracking-[0.25em] text-electric/80 lg:inline">
+            Kliko: shto LED · Zvarrit: lëviz
+          </span>
+          <button
+            type="button"
+            onClick={() => setHeatmapOn((o) => !o)}
+            className={cn(
+              'border px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.25em] transition-colors duration-300',
+              heatmapOn
+                ? 'border-electric/60 bg-electric/10 text-electric'
+                : 'border-white/15 text-fog hover:border-electric/40 hover:text-electric',
+            )}
+          >
+            {heatmapOn ? 'Fsheh heatmap' : 'Shfaq heatmap'}
+          </button>
+        </div>
       </div>
 
-      <div className="mx-auto aspect-[400/640] h-[min(68vh,600px)] max-w-full">
+      <div className="relative mx-auto aspect-[400/640] h-[min(68vh,600px)] max-w-full">
         <svg
           ref={svgRef}
           viewBox={`0 0 ${M.viewW} ${M.viewH}`}
@@ -211,7 +250,11 @@ export function DoorPanel() {
           />
 
           {/* light simulation (clipped to panel) */}
-          <g clipPath="url(#panel-clip)" pointerEvents="none">
+          <g
+            clipPath="url(#panel-clip)"
+            pointerEvents="none"
+            style={{ opacity: heatmapOn ? 0.35 : 1, transition: 'opacity 0.5s' }}
+          >
             {leds.map((led) => (
               <circle
                 key={`glow-${led.id}`}
@@ -305,7 +348,28 @@ export function DoorPanel() {
             );
           })}
         </svg>
+
+        <canvas
+          ref={canvasRef}
+          aria-hidden="true"
+          className={cn(
+            'pointer-events-none absolute inset-0 h-full w-full mix-blend-screen transition-opacity duration-500',
+            heatmapOn ? 'opacity-100' : 'opacity-0',
+          )}
+        />
       </div>
+
+      {heatmapOn && (
+        <div className="mt-3 flex items-center gap-3">
+          <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-fog/70">
+            Pa dritë
+          </span>
+          <div className="h-1.5 flex-1 rounded-full bg-[linear-gradient(to_right,#080610,#2a1250,#7c3aed,#2563eb,#00e5ff,#ffffff)]" />
+          <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-electric-bright/80">
+            E fortë
+          </span>
+        </div>
+      )}
     </div>
   );
 }
