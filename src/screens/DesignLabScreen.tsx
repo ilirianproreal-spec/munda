@@ -9,10 +9,12 @@ import { TestReport } from '../components/lab/TestReport';
 import { MAX_LEDS } from '../data/lab';
 import { LEVELS } from '../data/levels';
 import { useLabStore } from '../store/labStore';
+import { useT } from '../lib/translations';
 import { play } from '../lib/sound';
 import { cn } from '../lib/cn';
 
 export function DesignLabScreen() {
+  const t = useT();
   const ledCount = useLabStore((s) => s.leds.length);
   const testPhase = useLabStore((s) => s.testPhase);
   const currentLevel = useLabStore((s) => s.currentLevel);
@@ -33,18 +35,18 @@ export function DesignLabScreen() {
         <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
           <div>
             <div className="mb-1 font-mono text-[11px] uppercase tracking-[0.35em] text-electric">
-              Design Lab
+              {t('design_lab')}
             </div>
             <h1 className="font-display text-3xl font-extrabold tracking-[0.06em] text-white sm:text-4xl">
-              LIGHT CONFIGURATOR
+              {t('light_configurator')}
             </h1>
             <p className="mt-2 max-w-xl font-mono text-xs leading-relaxed text-fog">
-              Ndërto sinjaturën e dritës së panelit: vendos LED, rrugëto fibra dhe zgjidh tekstilin.
+              {t('lab_subtitle')}
             </p>
           </div>
           <div className="glass flex items-center gap-3 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.25em] text-fog">
             <span className="inline-block size-1.5 animate-pulse-dot rounded-full bg-electric" />
-            Niveli {currentLevel}/5 · Konfigurim aktiv
+            {t('level')} {currentLevel}/5 · {t('active_config')}
             <span className="text-white">
               {ledCount}/{MAX_LEDS} LED
             </span>
@@ -52,7 +54,7 @@ export function DesignLabScreen() {
         </header>
 
         {/* level selector */}
-        <div className="mb-3 grid gap-2 sm:grid-cols-5">
+        <div className="mb-3 grid grid-cols-2 gap-2 sm:grid-cols-5">
           {LEVELS.map((lv) => {
             const completed = completedLevels.includes(lv.id);
             const unlocked = lv.id === 1 || completedLevels.includes(lv.id - 1);
@@ -82,7 +84,7 @@ export function DesignLabScreen() {
                       current ? 'text-electric' : completed ? 'text-electric-bright' : 'text-fog',
                     )}
                   >
-                    NIVELI {lv.id}
+                    {t('level_prefix')} {lv.id}
                   </span>
                   {completed ? (
                     <Check className="size-3.5 text-electric-bright" />
@@ -100,7 +102,7 @@ export function DesignLabScreen() {
                     current || unlocked ? 'text-white' : 'text-fog/70',
                   )}
                 >
-                  {lv.name}
+                  {t(lv.nameKey)}
                 </div>
               </button>
             );
@@ -112,14 +114,14 @@ export function DesignLabScreen() {
           <div className="flex items-center gap-3">
             <span className="inline-block size-1.5 animate-pulse-dot rounded-full bg-electric" />
             <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-electric">
-              Misioni aktual
+              {t('current_mission')}
             </span>
           </div>
           <span className="font-display text-xs font-bold uppercase tracking-[0.15em] text-white">
-            {levelDef.code} — {levelDef.name}
+            {levelDef.code} — {t(levelDef.nameKey)}
           </span>
           <span className="hidden font-mono text-[11px] text-fog lg:inline">
-            {levelDef.objective}
+            {t(levelDef.objectiveKey)}
           </span>
           <div className="flex flex-wrap gap-2">
             {levelDef.constraints.map((c) => (
@@ -127,7 +129,7 @@ export function DesignLabScreen() {
                 key={c}
                 className="border border-white/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.15em] text-fog/80"
               >
-                {c}
+                {t(c)}
               </span>
             ))}
           </div>

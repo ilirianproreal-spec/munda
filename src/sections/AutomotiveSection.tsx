@@ -1,38 +1,39 @@
 import { FadeIn } from '../components/FadeIn';
 import { InteriorShowcase } from '../components/fx/InteriorShowcase';
+import { useT } from '../lib/translations';
 
 export function AutomotiveSection() {
+  const t = useT();
+
+  const ITEMS = [
+    { k: t('auto_1_k'), v: t('auto_1_v') },
+    { k: t('auto_2_k'), v: t('auto_2_v') },
+    { k: t('auto_3_k'), v: t('auto_3_v') },
+    { k: t('auto_4_k'), v: t('auto_4_v') },
+  ];
+
   return (
     <section id="automotive" className="relative overflow-hidden py-28">
       <div className="pointer-events-none absolute -left-40 top-1/3 h-96 w-96 rounded-full bg-violet/10 blur-[130px]" />
       <div className="mx-auto grid w-full max-w-7xl items-center gap-14 px-6 lg:grid-cols-2">
         <FadeIn>
           <div className="mb-3 font-mono text-[11px] uppercase tracking-[0.4em] text-electric">
-            Automotive
+            {t('sec_automotive')}
           </div>
           <h2 className="font-display text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
-            LIGHTING AS PART OF THE INTERIOR
+            {t('auto_title')}
           </h2>
           <p className="mt-6 max-w-lg font-mono text-sm leading-relaxed text-fog md:text-base">
-            From functional illumination to emotional experiences, integrated lighting transforms
-            the way we experience vehicle interiors.
+            {t('auto_text')}
           </p>
 
           <ul className="mt-10 space-y-4">
-            {[
-              ['Door panel', 'Light integrated into the door card surface'],
-              ['Ambient lighting', 'Dynamic light bars across dashboard and panels'],
-              ['Dashboard', 'Optical light guides in the instrument area'],
-              ['Textile surfaces', 'Light-emitting textile substrates'],
-            ].map(([k, v]) => (
-              <li
-                key={k}
-                className="flex items-baseline gap-4 border-b border-white/5 pb-3"
-              >
+            {ITEMS.map((it) => (
+              <li key={it.k} className="flex items-baseline gap-4 border-b border-white/5 pb-3">
                 <span className="w-40 shrink-0 font-display text-xs font-bold uppercase tracking-[0.18em] text-white">
-                  {k}
+                  {it.k}
                 </span>
-                <span className="font-mono text-xs text-fog">{v}</span>
+                <span className="font-mono text-xs text-fog">{it.v}</span>
               </li>
             ))}
           </ul>

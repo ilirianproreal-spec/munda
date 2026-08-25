@@ -1,4 +1,5 @@
 import type { LabStation, MaterialId, FiberConfigId } from '../types';
+import type { TKey } from '../lib/translations';
 
 export const APP_VERSION = '0.1.0';
 
@@ -8,7 +9,7 @@ export const LAB_STATIONS: LabStation[] = [
   {
     id: 'configurator',
     code: 'STN-01',
-    name: 'Light Configurator',
+    nameKey: 'stn_configurator',
     description:
       'Compose LED, optical fiber and textile layers into the door-panel light signature.',
     status: 'available',
@@ -16,21 +17,21 @@ export const LAB_STATIONS: LabStation[] = [
   {
     id: 'fiber-routing',
     code: 'STN-02',
-    name: 'Fiber Routing',
+    nameKey: 'stn_fiber',
     description: 'Route side-emitting fiber strands along panel geometry and validate bend radius.',
     status: 'locked',
   },
   {
     id: 'textile',
     code: 'STN-03',
-    name: 'Textile Integration',
+    nameKey: 'stn_textile',
     description: 'Weave light-emitting textile substrates into the surface layer.',
     status: 'locked',
   },
   {
     id: 'validation',
     code: 'STN-04',
-    name: 'Validation Bench',
+    nameKey: 'stn_validation',
     description: 'Run the final photometric, thermal and durability validation sequence.',
     status: 'locked',
   },
@@ -42,15 +43,15 @@ export const PANEL = { viewW: 400, viewH: 640 };
 
 export const MATERIALS: {
   id: MaterialId;
-  name: string;
-  desc: string;
+  nameKey: TKey;
+  descKey: TKey;
   spread: number; // light diffusion factor
   cost: number; // €
 }[] = [
-  { id: 'textile', name: 'Tekstil', desc: 'Shpërndarje e gjerë e dritës', spread: 1.25, cost: 22 },
-  { id: 'carbon', name: 'Karbon', desc: 'Dritë e fokusuar, peshë e lehtë', spread: 0.9, cost: 34 },
-  { id: 'soft', name: 'Soft-touch', desc: 'Ekuilibër cilësi–kosto', spread: 1.0, cost: 18 },
-  { id: 'alu', name: 'Alumini', desc: 'Reflektim i fortë, më pak shpërndarje', spread: 0.8, cost: 26 },
+  { id: 'textile', nameKey: 'mat_textile_name', descKey: 'mat_textile_desc', spread: 1.25, cost: 22 },
+  { id: 'carbon', nameKey: 'mat_carbon_name', descKey: 'mat_carbon_desc', spread: 0.9, cost: 34 },
+  { id: 'soft', nameKey: 'mat_soft_name', descKey: 'mat_soft_desc', spread: 1.0, cost: 18 },
+  { id: 'alu', nameKey: 'mat_alu_name', descKey: 'mat_alu_desc', spread: 0.8, cost: 26 },
 ];
 
 export const FIBER_ANCHORS: Record<string, { x: number; y: number }> = {
@@ -67,33 +68,33 @@ export const FIBER_ANCHORS: Record<string, { x: number; y: number }> = {
 
 export const FIBER_CONFIGS: {
   id: FiberConfigId;
-  name: string;
-  desc: string;
+  nameKey: TKey;
+  descKey: TKey;
   anchors: string[];
   power: number; // W
   cost: number; // €
 }[] = [
-  { id: 'off', name: 'Pa fibra', desc: 'Vetëm LED', anchors: [], power: 0, cost: 0 },
+  { id: 'off', nameKey: 'fiber_off_name', descKey: 'fiber_off_desc', anchors: [], power: 0, cost: 0 },
   {
     id: 'linear',
-    name: 'Lineare',
-    desc: 'Një bosht kryesor drite',
+    nameKey: 'fiber_linear_name',
+    descKey: 'fiber_linear_desc',
     anchors: ['top', 'botC'],
     power: 1.2,
     cost: 8,
   },
   {
     id: 'distributed',
-    name: 'Shpërndarëse',
-    desc: 'Fibra drejt zonave anësore',
+    nameKey: 'fiber_distributed_name',
+    descKey: 'fiber_distributed_desc',
     anchors: ['left', 'right', 'botL', 'botR'],
     power: 2.4,
     cost: 14,
   },
   {
     id: 'ring',
-    name: 'Unazore',
-    desc: 'Perimetër i plotë ndriçimi',
+    nameKey: 'fiber_ring_name',
+    descKey: 'fiber_ring_desc',
     anchors: ['top', 'left', 'right', 'botL', 'botR'],
     power: 3.6,
     cost: 18,

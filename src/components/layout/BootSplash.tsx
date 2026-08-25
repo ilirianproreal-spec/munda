@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion';
 import { LogoMark } from './LogoMark';
+import { useT } from '../../lib/translations';
 
 export function BootSplash() {
+  const t = useT();
+
   return (
     <motion.div
       initial={{ opacity: 1 }}
@@ -17,7 +20,7 @@ export function BootSplash() {
         <div className="h-full w-full origin-left animate-boot-bar bg-gradient-to-r from-violet via-electric to-white" />
       </div>
       <div className="mt-4 font-mono text-[9px] uppercase tracking-[0.3em] text-fog/50">
-        Duke ngarkuar sistemin
+        {t('loading_system')}
       </div>
     </motion.div>
   );

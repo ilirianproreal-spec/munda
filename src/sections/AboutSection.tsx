@@ -1,39 +1,28 @@
 import { FadeIn } from '../components/FadeIn';
-
-const PILLARS = [
-  {
-    n: '01',
-    title: 'Automotive expertise',
-    text: 'Interior lighting engineered for the vehicle environment — from door panels to dashboards.',
-  },
-  {
-    n: '02',
-    title: 'Textile technology',
-    text: 'Light-emitting textile structures that integrate with the surfaces of the cabin.',
-  },
-  {
-    n: '03',
-    title: 'Lighting technology',
-    text: 'LED systems and optical structures combined into flexible, controllable illumination.',
-  },
-];
+import { useT } from '../lib/translations';
 
 export function AboutSection() {
+  const t = useT();
+
+  const PILLARS = [
+    { n: '01', titleKey: 'pillar_1_title' as const, textKey: 'pillar_1_text' as const },
+    { n: '02', titleKey: 'pillar_2_title' as const, textKey: 'pillar_2_text' as const },
+    { n: '03', titleKey: 'pillar_3_title' as const, textKey: 'pillar_3_text' as const },
+  ];
+
   return (
     <section id="about" className="relative py-28">
       <div className="mx-auto w-full max-w-7xl px-6">
         <div className="grid items-start gap-14 lg:grid-cols-2">
           <FadeIn>
             <div className="mb-3 font-mono text-[11px] uppercase tracking-[0.4em] text-electric">
-              About
+              {t('sec_about')}
             </div>
             <h2 className="font-display text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
-              ENGINEERING THE FUTURE OF LIGHT
+              {t('about_title')}
             </h2>
             <p className="mt-6 max-w-lg font-mono text-sm leading-relaxed text-fog md:text-base">
-              MUNDA combines automotive expertise, textile technology and lighting technology to
-              develop integrated lighting solutions — light that becomes part of the interior
-              itself, not an add-on.
+              {t('about_text')}
             </p>
           </FadeIn>
 
@@ -46,9 +35,9 @@ export function AboutSection() {
                   </span>
                   <div>
                     <h3 className="font-display text-sm font-bold uppercase tracking-[0.18em] text-white">
-                      {p.title}
+                      {t(p.titleKey)}
                     </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-fog">{p.text}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-fog">{t(p.textKey)}</p>
                   </div>
                 </div>
               </FadeIn>

@@ -1,5 +1,6 @@
 import { Trash2, CircleDot } from 'lucide-react';
 import { useLabStore } from '../../store/labStore';
+import { useT } from '../../lib/translations';
 import { play } from '../../lib/sound';
 import { cn } from '../../lib/cn';
 
@@ -17,6 +18,7 @@ const SWATCHES = [
 ];
 
 export function LedControls() {
+  const t = useT();
   const leds = useLabStore((s) => s.leds);
   const selectedId = useLabStore((s) => s.selectedLedId);
   const updateLed = useLabStore((s) => s.updateLed);
@@ -27,16 +29,14 @@ export function LedControls() {
     <div className="glass p-5">
       <div className="mb-4 flex items-center justify-between">
         <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-fog">
-          Kontrolli i LED-it
+          {t('led_control')}
         </span>
         <CircleDot className={cn('size-4', selected ? 'text-electric' : 'text-fog/40')} />
       </div>
 
       {!selected ? (
         <div className="border border-dashed border-white/10 px-4 py-6 text-center font-mono text-[11px] leading-relaxed text-fog/70">
-          Zgjidh një LED në panel
-          <br />
-          ose kliko në panel për të shtuar një të ri.
+          {t('no_led_selected')}
         </div>
       ) : (
         <div>
@@ -48,7 +48,7 @@ export function LedControls() {
           </div>
 
           <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.25em] text-fog">
-            Ngjyra
+            {t('color')}
           </div>
           <div className="mb-4 grid grid-cols-5 gap-2">
             {SWATCHES.map((c) => (
@@ -59,7 +59,7 @@ export function LedControls() {
                   updateLed(selected.id, { color: c });
                   play('led');
                 }}
-                aria-label={`Ngjyra ${c}`}
+                aria-label={`Color ${c}`}
                 className={cn(
                   'h-7 rounded-[3px] border transition-all duration-200',
                   selected.color === c
@@ -73,7 +73,7 @@ export function LedControls() {
 
           <label className="mb-5 flex items-center justify-between gap-3">
             <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-fog">
-              Ngjyrë e personalizuar
+              {t('custom_color')}
             </span>
             <input
               type="color"
@@ -85,7 +85,7 @@ export function LedControls() {
 
           <div className="mb-1 flex items-center justify-between">
             <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-fog">
-              Intensiteti
+              {t('intensity')}
             </span>
             <span className="font-mono text-xs text-electric">
               {Math.round(selected.intensity)}%
@@ -97,7 +97,7 @@ export function LedControls() {
             max={100}
             value={selected.intensity}
             onChange={(e) => updateLed(selected.id, { intensity: Number(e.target.value) })}
-            className="mb-5 w-full accent-electric"
+            className="mb-5 w-full"
           />
 
           <button
@@ -109,7 +109,7 @@ export function LedControls() {
             className="group flex w-full items-center justify-center gap-2 border border-white/15 py-2.5 font-mono text-[10px] uppercase tracking-[0.3em] text-fog transition-colors hover:border-red-400/60 hover:text-red-300"
           >
             <Trash2 className="size-3.5 transition-transform group-hover:scale-110" />
-            Fshij LED-in
+            {t('delete_led')}
           </button>
         </div>
       )}

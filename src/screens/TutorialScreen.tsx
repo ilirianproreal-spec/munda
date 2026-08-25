@@ -1,43 +1,55 @@
 import { useState } from 'react';
+import type { ComponentType } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { TopBar } from '../components/layout/TopBar';
 import { GlowButton } from '../components/ui/GlowButton';
 import { LEDArt, FiberArt, TextileArt, OptimizeArt } from '../components/fx/TutorialArt';
+import { LAB_STATIONS } from '../data/lab';
+import { useT } from '../lib/translations';
+import type { TKey } from '../lib/translations';
 import { cn } from '../lib/cn';
 
-const STEPS = [
+const STEPS: Array<{
+  titleKey: TKey;
+  textKey: TKey;
+  Art: ComponentType;
+  accent: string;
+}> = [
   {
-    code: 'HAPI 1',
-    title: 'LED',
-    text: 'LED-i është burimi i dritës. Ai gjeneron dritën që ndriçon panelin e derës së veturës.',
+    titleKey: 'tut_1_title',
+    textKey: 'tut_1_text',
     Art: LEDArt,
     accent: 'text-electric',
   },
   {
-    code: 'HAPI 2',
-    title: 'FIBRA OPTIKE',
-    text: 'Fibra optike e transporton dritën nga LED-i drejt zonave të ndryshme të panelit — edhe aty ku LED-i nuk mund të vendoset.',
+    titleKey: 'tut_2_title',
+    textKey: 'tut_2_text',
     Art: FiberArt,
     accent: 'text-violet-bright',
   },
   {
-    code: 'HAPI 3',
-    title: 'TEKSTILI',
-    text: 'Struktura tekstile e shpërndan dritën në të gjithë sipërfaqen, duke krijuar një ndriçim të butë dhe uniform.',
+    titleKey: 'tut_3_title',
+    textKey: 'tut_3_text',
     Art: TextileArt,
     accent: 'text-electric-bright',
   },
   {
-    code: 'HAPI 4',
-    title: 'OPTIMIZO',
-    text: 'Gjej kombinimin më të mirë mes ndriçimit, energjisë dhe kostos. Çdo komponent që shton ka efekt në të trija.',
+    titleKey: 'tut_4_title',
+    textKey: 'tut_4_text',
     Art: OptimizeArt,
     accent: 'text-violet-bright',
   },
 ];
 
+const ROADMAP: Array<{ n: string; titleKey: TKey; textKey: TKey }> = [
+  { n: '01', titleKey: 'tut_step1_title', textKey: 'tut_step1_text' },
+  { n: '02', titleKey: 'tut_step2_title', textKey: 'tut_step2_text' },
+  { n: '03', titleKey: 'tut_step3_title', textKey: 'tut_step3_text' },
+];
+
 export function TutorialScreen() {
+  const t = useT();
   const [step, setStep] = useState(0);
   const last = step === STEPS.length - 1;
   const current = STEPS[step];
@@ -56,11 +68,11 @@ export function TutorialScreen() {
         {/* header + progress */}
         <div className="mb-8">
           <div className="mb-3 font-mono text-[11px] uppercase tracking-[0.35em] text-electric">
-            Tutorial — Si funksionon?
+            {t('tut_header')}
           </div>
           <div className="flex items-center gap-2">
             {STEPS.map((s, i) => (
-              <div key={s.code} className="h-[3px] flex-1 overflow-hidden rounded-full bg-white/10">
+              <div key={s.titleKey} className="h-[3px] flex-1 overflow-hidden rounded-full bg-white/10">
                 <div
                   className={cn(
                     'h-full rounded-full bg-electric transition-all duration-500',
@@ -71,7 +83,7 @@ export function TutorialScreen() {
             ))}
           </div>
           <div className="mt-3 font-mono text-[10px] uppercase tracking-[0.3em] text-fog">
-            {current.code} / {STEPS.length}
+            {t('step')} {step + 1} / {STEPS.length}
           </div>
         </div>
 
@@ -89,16 +101,14 @@ export function TutorialScreen() {
             </div>
 
             <div className="mt-8 text-center">
-              <div
-                className={cn('font-mono text-[11px] uppercase tracking-[0.4em]', current.accent)}
-              >
-                {current.code}
+              <div className={cn('font-mono text-[11px] uppercase tracking-[0.4em]', current.accent)}>
+                {t('step')} {step + 1}
               </div>
               <h1 className="mt-2 font-display text-3xl font-extrabold tracking-[0.1em] text-white sm:text-4xl">
-                {current.title}
+                {t(current.titleKey)}
               </h1>
               <p className="mx-auto mt-4 max-w-md font-mono text-sm leading-relaxed text-fog">
-                {current.text}
+                {t(current.textKey)}
               </p>
             </div>
           </motion.div>
@@ -113,7 +123,7 @@ export function TutorialScreen() {
               className="group inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-fog transition-colors hover:text-white"
             >
               <ArrowLeft className="size-4 transition-transform duration-300 group-hover:-translate-x-0.5" />
-              Kthehu
+              {t('back')}
             </button>
           ) : (
             <span />
@@ -121,15 +131,63 @@ export function TutorialScreen() {
 
           {last ? (
             <GlowButton to="/light-lab/lab">
-              Filloni laboratorin
+              {t('start_lab')}
               <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
             </GlowButton>
           ) : (
             <GlowButton onClick={next}>
-              Tjetër
+              {t('next')}
               <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
             </GlowButton>
           )}
+        </div>
+
+        {/* modules + roadmap (compact, below the wizard) */}
+        <div className="mt-14 grid gap-4 lg:grid-cols-2">
+          <div className="glass p-6">
+            <div className="mb-4 font-mono text-[10px] uppercase tracking-[0.3em] text-fog">
+              {t('tut_modules')}
+            </div>
+            <ul className="space-y-3">
+              {LAB_STATIONS.map((s) => (
+                <li key={s.id} className="flex items-center justify-between gap-4">
+                  <span className="font-mono text-[10px] tracking-[0.2em] text-fog">{s.code}</span>
+                  <span className="flex-1 font-display text-xs font-bold uppercase tracking-[0.15em] text-white">
+                    {t(s.nameKey as TKey)}
+                  </span>
+                  <span
+                    className={cn(
+                      'border px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.25em]',
+                      s.status === 'locked'
+                        ? 'border-white/10 text-fog/60'
+                        : 'border-electric/50 text-electric',
+                    )}
+                  >
+                    {s.status === 'locked' ? t('locked') : t('open')}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="glass p-6">
+            <div className="mb-4 font-mono text-[10px] uppercase tracking-[0.3em] text-fog">
+              {t('tut_roadmap')}
+            </div>
+            <ul className="space-y-4">
+              {ROADMAP.map((s) => (
+                <li key={s.n} className="flex gap-4">
+                  <span className="font-mono text-lg font-bold text-electric">{s.n}</span>
+                  <div>
+                    <div className="font-display text-xs font-bold uppercase tracking-[0.15em] text-white">
+                      {t(s.titleKey)}
+                    </div>
+                    <p className="mt-1 text-sm leading-relaxed text-fog">{t(s.textKey)}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </main>
     </div>

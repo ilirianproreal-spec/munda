@@ -5,7 +5,7 @@ export type LabStationStatus = 'locked' | 'available' | 'completed';
 export interface LabStation {
   id: LabStationId;
   code: string; // e.g. "STN-01"
-  name: string;
+  nameKey: string; // translation key
   description: string;
   status: LabStationStatus;
 }

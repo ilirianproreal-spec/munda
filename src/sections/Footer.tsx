@@ -1,8 +1,10 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { LogoMark } from '../components/layout/LogoMark';
 import { APP_VERSION } from '../data/lab';
+import { useT } from '../lib/translations';
 
 export function Footer() {
+  const t = useT();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -27,16 +29,16 @@ export function Footer() {
               <span className="font-display text-lg font-extrabold tracking-[0.3em]">MUNDA</span>
             </div>
             <p className="mt-4 max-w-xs font-mono text-xs leading-relaxed text-fog">
-              Intelligent textile lighting for the next generation of mobility.
+              {t('footer_tagline')}
             </p>
             <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.25em] text-fog/50">
-              © 2026 MUNDA Lighting Technology
+              {t('footer_copyright')}
             </p>
           </div>
 
           <div>
             <div className="mb-4 font-mono text-[10px] uppercase tracking-[0.3em] text-fog/60">
-              Company
+              {t('footer_company')}
             </div>
             <ul className="space-y-2.5">
               <li>
@@ -45,7 +47,7 @@ export function Footer() {
                   onClick={() => goAnchor('technology')}
                   className="font-mono text-xs uppercase tracking-[0.2em] text-fog transition-colors hover:text-white"
                 >
-                  Technology
+                  {t('nav_technology')}
                 </button>
               </li>
               <li>
@@ -53,7 +55,7 @@ export function Footer() {
                   to="/light-lab"
                   className="font-mono text-xs uppercase tracking-[0.2em] text-fog transition-colors hover:text-white"
                 >
-                  Light Lab
+                  {t('nav_light_lab')}
                 </Link>
               </li>
             </ul>
@@ -61,7 +63,7 @@ export function Footer() {
 
           <div>
             <div className="mb-4 font-mono text-[10px] uppercase tracking-[0.3em] text-fog/60">
-              Company
+              {t('footer_company')}
             </div>
             <ul className="space-y-2.5">
               <li>
@@ -69,7 +71,7 @@ export function Footer() {
                   to="/about"
                   className="font-mono text-xs uppercase tracking-[0.2em] text-fog transition-colors hover:text-white"
                 >
-                  About
+                  {t('nav_about')}
                 </Link>
               </li>
               <li>
@@ -77,7 +79,7 @@ export function Footer() {
                   to="/careers"
                   className="font-mono text-xs uppercase tracking-[0.2em] text-fog transition-colors hover:text-white"
                 >
-                  Careers
+                  {t('nav_careers')}
                 </Link>
               </li>
             </ul>
@@ -85,7 +87,7 @@ export function Footer() {
 
           <div>
             <div className="mb-4 font-mono text-[10px] uppercase tracking-[0.3em] text-fog/60">
-              Contact
+              {t('footer_contact')}
             </div>
             <ul className="space-y-2.5">
               <li>
@@ -93,11 +95,11 @@ export function Footer() {
                   href="mailto:contact@munda.technology"
                   className="font-mono text-xs uppercase tracking-[0.2em] text-fog transition-colors hover:text-white"
                 >
-                  Contact
+                  {t('footer_contact')}
                 </a>
               </li>
               <li className="pt-2 font-mono text-[9px] uppercase tracking-[0.2em] text-fog/40">
-                Sim build {APP_VERSION}
+                {t('sim_build')} {APP_VERSION}
               </li>
             </ul>
           </div>

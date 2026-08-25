@@ -1,10 +1,12 @@
 import { Network } from 'lucide-react';
 import { FIBER_CONFIGS } from '../../data/lab';
 import { useLabStore } from '../../store/labStore';
+import { useT } from '../../lib/translations';
 import { play } from '../../lib/sound';
 import { cn } from '../../lib/cn';
 
 export function FiberPicker() {
+  const t = useT();
   const fiberConfig = useLabStore((s) => s.fiberConfig);
   const setFiberConfig = useLabStore((s) => s.setFiberConfig);
 
@@ -12,7 +14,7 @@ export function FiberPicker() {
     <div className="glass p-5">
       <div className="mb-3 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.3em] text-fog">
         <Network className="size-3.5 text-violet" />
-        Konfigurimi i fibrave
+        {t('fiber_config')}
       </div>
       <div className="space-y-2">
         {FIBER_CONFIGS.map((f) => (
@@ -37,9 +39,9 @@ export function FiberPicker() {
                   fiberConfig === f.id ? 'text-violet-bright' : 'text-white',
                 )}
               >
-                {f.name}
+                {t(f.nameKey)}
               </span>
-              <span className="mt-0.5 block font-mono text-[9px] text-fog">{f.desc}</span>
+              <span className="mt-0.5 block font-mono text-[9px] text-fog">{t(f.descKey)}</span>
             </span>
             <span className="shrink-0 text-right font-mono text-[9px] leading-tight text-fog/70">
               {f.power} W

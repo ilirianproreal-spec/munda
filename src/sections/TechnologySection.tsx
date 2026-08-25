@@ -1,47 +1,49 @@
 import { Layers, Network, Zap } from 'lucide-react';
 import { FadeIn } from '../components/FadeIn';
-
-const CARDS = [
-  {
-    n: '01',
-    icon: Layers,
-    title: 'Textile',
-    text: 'Flexible textile structures designed for integrated lighting.',
-    accent: 'text-electric',
-    hover: 'hover:border-electric/40 group-hover:text-electric',
-  },
-  {
-    n: '02',
-    icon: Network,
-    title: 'Optics',
-    text: 'Advanced optical structures distribute light across complex surfaces.',
-    accent: 'text-violet-bright',
-    hover: 'hover:border-violet/40 group-hover:text-violet-bright',
-  },
-  {
-    n: '03',
-    icon: Zap,
-    title: 'LED',
-    text: 'Efficient LED technology enables dynamic and customizable illumination.',
-    accent: 'text-electric-bright',
-    hover: 'hover:border-electric-bright/40 group-hover:text-electric-bright',
-  },
-];
+import { useT } from '../lib/translations';
 
 export function TechnologySection() {
+  const t = useT();
+
+  const CARDS = [
+    {
+      n: '01',
+      icon: Layers,
+      titleKey: 'tech_01_title' as const,
+      textKey: 'tech_01_text' as const,
+      accent: 'text-electric',
+      border: 'hover:border-electric/40',
+    },
+    {
+      n: '02',
+      icon: Network,
+      titleKey: 'tech_02_title' as const,
+      textKey: 'tech_02_text' as const,
+      accent: 'text-violet-bright',
+      border: 'hover:border-violet/40',
+    },
+    {
+      n: '03',
+      icon: Zap,
+      titleKey: 'tech_03_title' as const,
+      textKey: 'tech_03_text' as const,
+      accent: 'text-electric-bright',
+      border: 'hover:border-electric-bright/40',
+    },
+  ];
+
   return (
     <section id="technology" className="relative py-28">
       <div className="mx-auto w-full max-w-7xl px-6">
         <FadeIn>
           <div className="mb-3 font-mono text-[11px] uppercase tracking-[0.4em] text-electric">
-            Technology
+            {t('sec_technology')}
           </div>
           <h2 className="max-w-2xl font-display text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
-            LIGHTING BEYOND THE VISIBLE
+            {t('tech_title')}
           </h2>
           <p className="mt-6 max-w-2xl font-mono text-sm leading-relaxed text-fog md:text-base">
-            MUNDA combines textile structures, optical technologies and intelligent LED systems to
-            create flexible and integrated lighting solutions.
+            {t('tech_text')}
           </p>
         </FadeIn>
 
@@ -49,18 +51,18 @@ export function TechnologySection() {
           {CARDS.map((c, i) => (
             <FadeIn key={c.n} delay={i * 0.1}>
               <div
-                className={`group glass relative p-8 transition-all duration-300 hover:-translate-y-1 ${c.hover.split(' ')[0]}`}
+                className={`group glass relative p-8 transition-all duration-300 hover:-translate-y-1 ${c.border}`}
               >
                 <div className="flex items-start justify-between">
                   <span className="font-mono text-[10px] tracking-[0.3em] text-fog/70">{c.n}</span>
                   <c.icon className={`size-5 transition-colors duration-300 ${c.accent}`} />
                 </div>
                 <h3 className="mt-10 font-display text-xl font-extrabold uppercase tracking-[0.15em] text-white">
-                  {c.title}
+                  {t(c.titleKey)}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-fog">{c.text}</p>
+                <p className="mt-3 text-sm leading-relaxed text-fog">{t(c.textKey)}</p>
                 <span
-                  className={`mt-6 block h-px w-10 bg-white/15 transition-all duration-300 group-hover:w-20 ${c.accent.split(' ')[0].replace('text-', 'bg-')}`}
+                  className={`mt-6 block h-px w-10 bg-white/15 transition-all duration-300 group-hover:w-20 ${c.accent.replace('text-', 'bg-')}/60`}
                 />
               </div>
             </FadeIn>

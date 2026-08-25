@@ -3,11 +3,14 @@ import { Volume2, VolumeX } from 'lucide-react';
 import { APP_VERSION } from '../../data/lab';
 import { LogoMark } from './LogoMark';
 import { StatusLight } from '../ui/StatusLight';
+import { LangToggle } from '../ui/LangToggle';
 import { useSettingsStore } from '../../store/settingsStore';
+import { useT } from '../../lib/translations';
 import { play } from '../../lib/sound';
 import { cn } from '../../lib/cn';
 
 export function TopBar() {
+  const t = useT();
   const soundOn = useSettingsStore((s) => s.soundOn);
   const toggleSound = useSettingsStore((s) => s.toggleSound);
 
@@ -20,16 +23,21 @@ export function TopBar() {
             MUNDA <span className="text-electric">LIGHT LAB</span>
           </span>
         </Link>
-        <div className="flex items-center gap-4">
-          <StatusLight label="System nominal" tone="electric" className="hidden sm:inline-flex" />
+        <div className="flex items-center gap-3">
+          <StatusLight
+            label={t('system_nominal')}
+            tone="electric"
+            className="hidden sm:inline-flex"
+          />
+          <LangToggle />
           <button
             type="button"
             onClick={() => {
               play('toggle');
               toggleSound();
             }}
-            aria-label={soundOn ? 'Fik zërin' : 'Ndiz zërin'}
-            title={soundOn ? 'Zëri: on' : 'Zëri: off'}
+            aria-label={soundOn ? t('sound_off') : t('sound_on')}
+            title={soundOn ? t('sound_on') : t('sound_off')}
             className={cn(
               'flex items-center gap-1.5 border px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.2em] transition-colors duration-300',
               soundOn
@@ -38,10 +46,10 @@ export function TopBar() {
             )}
           >
             {soundOn ? <Volume2 className="size-3.5" /> : <VolumeX className="size-3.5" />}
-            <span className="hidden sm:inline">{soundOn ? 'Sound on' : 'Sound off'}</span>
+            <span className="hidden sm:inline">{soundOn ? t('sound_on') : t('sound_off')}</span>
           </button>
           <span className="hidden font-mono text-[10px] uppercase tracking-[0.25em] text-fog md:inline">
-            Build {APP_VERSION}
+            {t('build')} {APP_VERSION}
           </span>
         </div>
       </div>

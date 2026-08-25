@@ -3,20 +3,12 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { LogoMark } from '../components/layout/LogoMark';
+import { LangToggle } from '../components/ui/LangToggle';
+import { useT } from '../lib/translations';
 import { cn } from '../lib/cn';
 
-const ANCHOR_LINKS = [
-  { label: 'Technology', id: 'technology' },
-  { label: 'Automotive', id: 'automotive' },
-];
-
-const PAGE_LINKS = [
-  { label: 'Light Lab', to: '/light-lab' },
-  { label: 'About', to: '/about' },
-  { label: 'Careers', to: '/careers' },
-];
-
 export function Navbar() {
+  const t = useT();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const location = useLocation();
@@ -41,6 +33,17 @@ export function Navbar() {
       }, 150);
     }
   };
+
+  const ANCHOR_LINKS = [
+    { label: t('nav_technology'), id: 'technology' },
+    { label: t('nav_automotive'), id: 'automotive' },
+  ];
+
+  const PAGE_LINKS = [
+    { label: t('nav_light_lab'), to: '/light-lab' },
+    { label: t('nav_about'), to: '/about' },
+    { label: t('nav_careers'), to: '/careers' },
+  ];
 
   return (
     <header
@@ -81,17 +84,21 @@ export function Navbar() {
               {l.label}
             </Link>
           ))}
+          <LangToggle />
         </nav>
 
         {/* mobile toggle */}
-        <button
-          type="button"
-          aria-label="Menu"
-          onClick={() => setOpen((o) => !o)}
-          className="flex size-9 items-center justify-center border border-white/10 text-white lg:hidden"
-        >
-          {open ? <X className="size-4" /> : <Menu className="size-4" />}
-        </button>
+        <div className="flex items-center gap-3 lg:hidden">
+          <LangToggle />
+          <button
+            type="button"
+            aria-label={t('nav_menu')}
+            onClick={() => setOpen((o) => !o)}
+            className="flex size-9 items-center justify-center border border-white/10 text-white"
+          >
+            {open ? <X className="size-4" /> : <Menu className="size-4" />}
+          </button>
+        </div>
       </div>
 
       {/* mobile menu */}

@@ -4,6 +4,7 @@ import { useScroll, useTransform } from 'framer-motion';
 import { Play, ArrowDown } from 'lucide-react';
 import { LightField } from '../components/fx/LightField';
 import { GlowButton } from '../components/ui/GlowButton';
+import { useT } from '../lib/translations';
 
 const container: Variants = {
   hidden: {},
@@ -16,6 +17,7 @@ const item: Variants = {
 };
 
 export function Hero() {
+  const t = useT();
   const { scrollY } = useScroll();
   const contentY = useTransform(scrollY, [0, 700], [0, 110]);
   const contentOpacity = useTransform(scrollY, [0, 550], [1, 0.15]);
@@ -23,7 +25,6 @@ export function Hero() {
 
   return (
     <section id="hero" className="relative flex min-h-screen flex-col overflow-hidden">
-      {/* parallax background layers */}
       <motion.div style={{ y: bgY }} className="absolute inset-0">
         <LightField className="h-full w-full" />
         <div className="pointer-events-none absolute -left-40 top-1/4 h-96 w-96 rounded-full bg-electric/15 blur-[130px]" />
@@ -42,17 +43,17 @@ export function Hero() {
             className="mb-7 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.4em] text-electric"
           >
             <span className="inline-block size-1.5 animate-pulse-dot rounded-full bg-electric" />
-            MUNDA Automotive · Lighting Technology
+            {t('hero_kicker')}
           </motion.div>
 
           <motion.h1
             variants={item}
             className="font-display text-6xl font-extrabold leading-[0.95] tracking-tight text-white sm:text-7xl md:text-8xl"
           >
-            LIGHT,
+            {t('hero_title_1')}
             <br />
             <span className="bg-gradient-to-r from-electric via-electric-bright to-violet bg-clip-text text-transparent [filter:drop-shadow(0_0_40px_rgba(0,229,255,0.35))]">
-              REIMAGINED.
+              {t('hero_title_2')}
             </span>
           </motion.h1>
 
@@ -60,7 +61,7 @@ export function Hero() {
             variants={item}
             className="mt-7 max-w-xl font-mono text-sm leading-relaxed tracking-[0.05em] text-fog md:text-base"
           >
-            Intelligent textile lighting for the next generation of mobility.
+            {t('hero_sub')}
           </motion.p>
 
           <motion.div variants={item} className="mt-12 flex flex-col items-start gap-4 sm:flex-row">
@@ -70,24 +71,23 @@ export function Hero() {
               }
               variant="glass"
             >
-              Explore Technology
+              {t('explore_technology')}
             </GlowButton>
             <GlowButton to="/light-lab">
               <Play className="size-4 fill-current" />
-              Enter Light Lab
+              {t('enter_light_lab')}
             </GlowButton>
           </motion.div>
         </motion.div>
       </motion.div>
 
-      {/* scroll hint */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.4, duration: 0.8 }}
         className="relative z-10 flex items-center justify-center gap-3 pb-8 font-mono text-[9px] uppercase tracking-[0.35em] text-fog/60"
       >
-        Scroll
+        {t('scroll')}
         <motion.span
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}

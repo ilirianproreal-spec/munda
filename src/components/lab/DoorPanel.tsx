@@ -5,6 +5,7 @@ import { useLabStore } from '../../store/labStore';
 import { clamp, ledRadius, PANEL_PATH, strandPath, computeMetrics } from '../../lib/light';
 import { renderHeatmap, renderTestAnimation } from '../../lib/heatmap';
 import { play } from '../../lib/sound';
+import { useT } from '../../lib/translations';
 import { cn } from '../../lib/cn';
 import type { Led } from '../../types';
 
@@ -15,6 +16,7 @@ const STITCH_PATH =
   'M 90 26 L 310 26 Q 334 26 334 50 L 334 598 Q 334 622 310 622 L 90 622 Q 66 622 66 598 L 66 50 Q 66 26 90 26 Z';
 
 export function DoorPanel() {
+  const t = useT();
   const leds = useLabStore((s) => s.leds);
   const selectedId = useLabStore((s) => s.selectedLedId);
   const material = useLabStore((s) => s.material);
@@ -29,13 +31,13 @@ export function DoorPanel() {
   const dragRef = useRef<{ id: string; dx: number; dy: number } | null>(null);
   const movedRef = useRef(false);
 
-  const mat = MATERIALS.find((m) => m.id === material) ?? MATERIALS[0];
-  const fib = FIBER_CONFIGS.find((f) => f.id === fiberConfig) ?? FIBER_CONFIGS[0];
-
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const testBarRef = useRef<HTMLDivElement | null>(null);
   const testPctRef = useRef<HTMLSpanElement | null>(null);
   const [heatmapOn, setHeatmapOn] = useState(false);
+
+  const mat = MATERIALS.find((m) => m.id === material) ?? MATERIALS[0];
+  const fib = FIBER_CONFIGS.find((f) => f.id === fiberConfig) ?? FIBER_CONFIGS[0];
 
   // recompute the light field whenever LEDs / material / visibility change
   useEffect(() => {
@@ -78,15 +80,15 @@ export function DoorPanel() {
     const start = performance.now();
 
     const loop = (now: number) => {
-      const t = Math.min(1, (now - start) / DUR);
-      renderTestAnimation(ctx, W, H, snapshotLeds, mat0.spread, M.viewW, M.viewH, t, anchors);
+      const tProg = Math.min(1, (now - start) / DUR);
+      renderTestAnimation(ctx, W, H, snapshotLeds, mat0.spread, M.viewW, M.viewH, tProg, anchors);
       if (testBarRef.current) {
-        testBarRef.current.style.width = `${Math.round(t * 100)}%`;
+        testBarRef.current.style.width = `${Math.round(tProg * 100)}%`;
       }
       if (testPctRef.current) {
-        testPctRef.current.textContent = `${Math.round(t * 100)}%`;
+        testPctRef.current.textContent = `${Math.round(tProg * 100)}%`;
       }
-      if (t < 1) {
+      if (tProg < 1) {
         raf = requestAnimationFrame(loop);
       } else {
         timer = window.setTimeout(() => {
@@ -161,11 +163,11 @@ export function DoorPanel() {
     <div className="glass p-4 shadow-[0_0_80px_-30px_rgba(0,229,255,0.35)] sm:p-5">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-fog">
-          Paneli i derës
+          {t('door_panel')}
         </span>
         <div className="flex items-center gap-3">
           <span className="hidden font-mono text-[10px] uppercase tracking-[0.25em] text-electric/80 lg:inline">
-            Kliko: shto LED · Zvarrit: lëviz
+            {t('panel_hint')}
           </span>
           <button
             type="button"
@@ -177,7 +179,7 @@ export function DoorPanel() {
                 : 'border-white/15 text-fog hover:border-electric/40 hover:text-electric',
             )}
           >
-            {heatmapOn ? 'Fsheh heatmap' : 'Shfaq heatmap'}
+            {heatmapOn ? t('hide_heatmap') : t('show_heatmap')}
           </button>
         </div>
       </div>
@@ -195,7 +197,6 @@ export function DoorPanel() {
               <path d={PANEL_PATH} />
             </clipPath>
 
-            {/* materials */}
             <pattern id="pat-textile" width="12" height="12" patternUnits="userSpaceOnUse">
               <path d="M0 6 H12" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
               <path d="M6 0 V12" stroke="rgba(255,255,255,0.035)" strokeWidth="1" />
@@ -219,13 +220,11 @@ export function DoorPanel() {
               <stop offset="100%" stopColor="#17171f" />
             </linearGradient>
 
-            {/* ambient behind panel */}
             <radialGradient id="panel-ambient" cx="0.5" cy="0.45" r="0.6">
               <stop offset="0%" stopColor="rgba(0,229,255,0.12)" />
               <stop offset="100%" stopColor="rgba(0,229,255,0)" />
             </radialGradient>
 
-            {/* per-LED light gradients */}
             {leds.map((led) => {
               const a = 0.3 + 0.55 * (led.intensity / 100);
               return (
@@ -238,7 +237,6 @@ export function DoorPanel() {
             })}
           </defs>
 
-          {/* ambient + base surface */}
           <rect
             x={54}
             y={14}
@@ -250,34 +248,28 @@ export function DoorPanel() {
           />
           <path d={PANEL_PATH} fill={`url(#pat-${mat.id})`} stroke="rgba(255,255,255,0.1)" strokeWidth={1.2} />
 
-          {/* panel details */}
           <g pointerEvents="none">
             <path d={STITCH_PATH} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth={1} strokeDasharray="2 7" />
-            {/* handle with ambient light strip */}
             <rect x={252} y={150} width={58} height={20} rx={6} fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.18)" />
             <rect x={262} y={156} width={38} height={8} rx={4} fill="rgba(0,229,255,0.08)" stroke="rgba(0,229,255,0.2)" />
-            {/* armrest */}
             <rect x={96} y={404} width={208} height={34} rx={14} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" />
-            {/* speaker grille */}
             <circle cx={110} cy={520} r={26} stroke="rgba(255,255,255,0.12)" strokeWidth={1} strokeDasharray="1 3" />
             <circle cx={110} cy={520} r={16} stroke="rgba(255,255,255,0.1)" strokeWidth={1} />
             <circle cx={110} cy={520} r={2.5} fill="rgba(255,255,255,0.15)" />
-            {/* zone labels */}
             <text x={78} y={96} fill="rgba(255,255,255,0.14)" fontSize={8} fontFamily="'JetBrains Mono', monospace" letterSpacing={2}>
-              ZONA A
+              {t('zone_a')}
             </text>
             <text x={78} y={300} fill="rgba(255,255,255,0.14)" fontSize={8} fontFamily="'JetBrains Mono', monospace" letterSpacing={2}>
-              ZONA B
+              {t('zone_b')}
             </text>
             <text x={78} y={560} fill="rgba(255,255,255,0.14)" fontSize={8} fontFamily="'JetBrains Mono', monospace" letterSpacing={2}>
-              ZONA C
+              {t('zone_c')}
             </text>
             <text x={300} y={612} fill="rgba(255,255,255,0.1)" fontSize={7} fontFamily="'JetBrains Mono', monospace" letterSpacing={2} textAnchor="end">
               MUNDA LIGHTING
             </text>
           </g>
 
-          {/* click layer (empty panel → add LED) */}
           <rect
             x={54}
             y={14}
@@ -289,7 +281,6 @@ export function DoorPanel() {
             className="cursor-crosshair"
           />
 
-          {/* light simulation (clipped to panel) */}
           <g
             clipPath="url(#panel-clip)"
             pointerEvents="none"
@@ -347,7 +338,6 @@ export function DoorPanel() {
               )}
           </g>
 
-          {/* LEDs */}
           {leds.map((led) => {
             const selected = led.id === selectedId;
             return (
@@ -360,9 +350,7 @@ export function DoorPanel() {
                 className="group cursor-grab active:cursor-grabbing"
                 style={{ touchAction: 'none' }}
               >
-                {/* hit area */}
                 <circle cx={led.x} cy={led.y} r={18} fill="transparent" />
-                {/* hover ring */}
                 <circle
                   cx={led.x}
                   cy={led.y}
@@ -372,7 +360,6 @@ export function DoorPanel() {
                   strokeWidth={1}
                   className="opacity-0 transition-opacity duration-200 group-hover:opacity-70"
                 />
-                {/* selection ring */}
                 {selected && (
                   <circle
                     cx={led.x}
@@ -385,7 +372,6 @@ export function DoorPanel() {
                     className="animate-pulse-soft"
                   />
                 )}
-                {/* glow core */}
                 <circle
                   cx={led.x}
                   cy={led.y}
@@ -411,7 +397,7 @@ export function DoorPanel() {
           <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex flex-col items-center gap-2">
             <span className="mt-3 inline-flex items-center gap-2 border border-electric/50 bg-ink/80 px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.3em] text-electric backdrop-blur-sm">
               <span className="size-1.5 animate-pulse-dot rounded-full bg-electric" />
-              Testi në vazhdim
+              {t('test_in_progress')}
               <span ref={testPctRef} className="text-electric-bright">
                 0%
               </span>
@@ -430,11 +416,11 @@ export function DoorPanel() {
       {heatmapOn && (
         <div className="mt-3 flex items-center gap-3">
           <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-fog/70">
-            Pa dritë
+            {t('no_light')}
           </span>
           <div className="h-1.5 flex-1 rounded-full bg-[linear-gradient(to_right,#080610,#2a1250,#7c3aed,#2563eb,#00e5ff,#ffffff)]" />
           <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-electric-bright/80">
-            E fortë
+            {t('strong')}
           </span>
         </div>
       )}

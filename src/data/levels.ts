@@ -1,7 +1,8 @@
 import type { LabMetrics } from '../lib/light';
+import type { TKey } from '../lib/translations';
 
 export interface LevelCriterion {
-  label: string;
+  labelKey: TKey;
   met: boolean;
   value: string;
   target: string;
@@ -10,9 +11,9 @@ export interface LevelCriterion {
 export interface LevelDef {
   id: number;
   code: string;
-  name: string;
-  objective: string;
-  constraints: string[];
+  nameKey: TKey;
+  objectiveKey: TKey;
+  constraints: TKey[];
   evaluate: (m: LabMetrics) => LevelCriterion[];
 }
 
@@ -20,18 +21,18 @@ export const LEVELS: LevelDef[] = [
   {
     id: 1,
     code: 'NIVELI 1',
-    name: 'NDRIÇIMI BAZË',
-    objective: 'Arri 80% uniformitet të dritës në panel.',
-    constraints: ['Maksimumi 3 LED'],
+    nameKey: 'l1_name',
+    objectiveKey: 'l1_objective',
+    constraints: ['l1_c1', 'l1_c2'],
     evaluate: (m) => [
       {
-        label: 'Uniformiteti ≥ 80%',
+        labelKey: 'l1_c1',
         met: m.uniformity >= 80,
         value: `${Math.round(m.uniformity)}%`,
         target: '≥ 80%',
       },
       {
-        label: 'Maksimumi 3 LED',
+        labelKey: 'l1_c2',
         met: m.ledCount <= 3,
         value: `${m.ledCount} LED`,
         target: '≤ 3',
@@ -41,18 +42,18 @@ export const LEVELS: LevelDef[] = [
   {
     id: 2,
     code: 'NIVELI 2',
-    name: 'EFIKASITETI',
-    objective: 'Arri 85% uniformitet duke e përdorur energjinë në mënyrë efikase.',
-    constraints: ['Uniformiteti ≥ 85%', 'Efikasiteti i energjisë ≥ 75%'],
+    nameKey: 'l2_name',
+    objectiveKey: 'l2_objective',
+    constraints: ['l2_c1', 'l2_c2'],
     evaluate: (m) => [
       {
-        label: 'Uniformiteti ≥ 85%',
+        labelKey: 'l2_c1',
         met: m.uniformity >= 85,
         value: `${Math.round(m.uniformity)}%`,
         target: '≥ 85%',
       },
       {
-        label: 'Efikasiteti i energjisë ≥ 75%',
+        labelKey: 'l2_c2',
         met: m.energy >= 75,
         value: `${Math.round(m.energy)}%`,
         target: '≥ 75%',
@@ -62,12 +63,12 @@ export const LEVELS: LevelDef[] = [
   {
     id: 3,
     code: 'NIVELI 3',
-    name: 'INTERIOR PREMIUM',
-    objective: 'Krijo një dizajn me cilësi të lartë vizuale.',
-    constraints: ['Cilësia e dizajnit ≥ 80%'],
+    nameKey: 'l3_name',
+    objectiveKey: 'l3_objective',
+    constraints: ['l3_c1'],
     evaluate: (m) => [
       {
-        label: 'Cilësia e dizajnit ≥ 80%',
+        labelKey: 'l3_c1',
         met: m.design >= 80,
         value: `${Math.round(m.design)}%`,
         target: '≥ 80%',
@@ -77,18 +78,18 @@ export const LEVELS: LevelDef[] = [
   {
     id: 4,
     code: 'NIVELI 4',
-    name: 'PRODHIMI',
-    objective: 'Balanco koston e prodhimit me prodhueshmërinë.',
-    constraints: ['Kostoja ≥ 75%', 'Prodhueshmëria ≥ 80%'],
+    nameKey: 'l4_name',
+    objectiveKey: 'l4_objective',
+    constraints: ['l4_c1', 'l4_c2'],
     evaluate: (m) => [
       {
-        label: 'Kostoja e prodhimit ≥ 75%',
+        labelKey: 'l4_c1',
         met: m.cost >= 75,
         value: `${Math.round(m.cost)}%`,
         target: '≥ 75%',
       },
       {
-        label: 'Prodhueshmëria ≥ 80%',
+        labelKey: 'l4_c2',
         met: m.manufacturability >= 80,
         value: `${Math.round(m.manufacturability)}%`,
         target: '≥ 80%',
@@ -98,12 +99,12 @@ export const LEVELS: LevelDef[] = [
   {
     id: 5,
     code: 'NIVELI 5',
-    name: 'MUNDA MASTER',
-    objective: 'Arri të paktën 90/100 në rezultatin total.',
-    constraints: ['Rezultati total ≥ 90'],
+    nameKey: 'l5_name',
+    objectiveKey: 'l5_objective',
+    constraints: ['l5_c1'],
     evaluate: (m) => [
       {
-        label: 'Rezultati total ≥ 90',
+        labelKey: 'l5_c1',
         met: m.total >= 90,
         value: `${Math.round(m.total)}/100`,
         target: '≥ 90',

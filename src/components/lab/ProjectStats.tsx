@@ -3,43 +3,20 @@ import { Play } from 'lucide-react';
 import { computeMetrics } from '../../lib/light';
 import { useLabStore } from '../../store/labStore';
 import { GlowButton } from '../ui/GlowButton';
+import { useT } from '../../lib/translations';
 import { play } from '../../lib/sound';
 import { cn } from '../../lib/cn';
 
 const METRICS = [
-  {
-    key: 'uniformity',
-    label: 'Uniformiteti i dritës',
-    text: 'text-electric',
-    bar: 'bg-electric',
-  },
-  {
-    key: 'energy',
-    label: 'Efikasiteti i energjisë',
-    text: 'text-electric-bright',
-    bar: 'bg-electric-bright',
-  },
-  {
-    key: 'cost',
-    label: 'Kostoja e prodhimit',
-    text: 'text-violet-bright',
-    bar: 'bg-violet',
-  },
-  {
-    key: 'design',
-    label: 'Cilësia e dizajnit',
-    text: 'text-violet-bright',
-    bar: 'bg-violet-bright',
-  },
-  {
-    key: 'manufacturability',
-    label: 'Mundësia e prodhimit',
-    text: 'text-white',
-    bar: 'bg-white/70',
-  },
+  { key: 'uniformity', labelKey: 'metric_uniformity' as const, text: 'text-electric', bar: 'bg-electric' },
+  { key: 'energy', labelKey: 'metric_energy' as const, text: 'text-electric-bright', bar: 'bg-electric-bright' },
+  { key: 'cost', labelKey: 'metric_cost' as const, text: 'text-violet-bright', bar: 'bg-violet' },
+  { key: 'design', labelKey: 'metric_design' as const, text: 'text-violet-bright', bar: 'bg-violet-bright' },
+  { key: 'manufacturability', labelKey: 'metric_manufacturability' as const, text: 'text-white', bar: 'bg-white/70' },
 ] as const;
 
 export function ProjectStats() {
+  const t = useT();
   const leds = useLabStore((s) => s.leds);
   const material = useLabStore((s) => s.material);
   const fiberConfig = useLabStore((s) => s.fiberConfig);
@@ -65,11 +42,11 @@ export function ProjectStats() {
     <aside className="glass p-5">
       <div className="mb-5 flex items-center justify-between">
         <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-fog">
-          Statistikat e projektit
+          {t('project_stats')}
         </span>
         <span className="flex items-center gap-1.5 font-mono text-[10px] tracking-[0.2em] text-electric">
           <span className="size-1.5 animate-pulse-dot rounded-full bg-electric" />
-          LIVE
+          {t('live')}
         </span>
       </div>
 
@@ -78,7 +55,7 @@ export function ProjectStats() {
           <li key={mt.key}>
             <div className="mb-1.5 flex items-baseline justify-between gap-3">
               <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-fog">
-                {mt.label}
+                {t(mt.labelKey)}
               </span>
               <span className={cn('font-mono text-xs', mt.text)}>
                 {Math.round(m[mt.key])}%
@@ -96,7 +73,7 @@ export function ProjectStats() {
 
       <div className="mt-6 border-t border-white/10 pt-5 text-center">
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-fog">
-          Rezultati total
+          {t('total_score')}
         </div>
         <div
           className={cn(
@@ -114,7 +91,7 @@ export function ProjectStats() {
           />
         </div>
         <div className="mt-2 font-mono text-[9px] uppercase tracking-[0.2em] text-fog/60">
-          U 30% · E 20% · K 20% · D 15% · P 15%
+          {t('weights')}
         </div>
       </div>
 
@@ -128,7 +105,7 @@ export function ProjectStats() {
             className="w-full"
           >
             <Play className="size-4 fill-current" />
-            Fillo testin
+            {t('fillo_testin')}
           </GlowButton>
         </div>
       )}
