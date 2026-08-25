@@ -15,3 +15,17 @@ export interface GameSession {
   activeStation: LabStationId | null;
   completedStations: LabStationId[];
 }
+
+/* ————— Design Lab (gameplay) ————— */
+
+export interface Led {
+  id: string;
+  x: number; // panel viewBox coords (0..400)
+  y: number; // panel viewBox coords (0..640)
+  intensity: number; // 0..100
+  color: string; // hex
+}
+
+export type MaterialId = 'textile' | 'carbon' | 'soft' | 'alu';
+
+export type FiberConfigId = 'off' | 'linear' | 'distributed' | 'ring';
