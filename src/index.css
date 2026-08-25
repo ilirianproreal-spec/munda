@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  /* ——— MUNDA Light Lab palette: near-black / warm light / fiber cyan ——— */
+  --color-ink: #050508;
+  --color-panel: #0b0b12;
+  --color-panel-2: #12121b;
+  --color-line: #1e1e2a;
+  --color-line-soft: #14141d;
+  --color-light: #ffb84d;
+  --color-light-bright: #ffe3ad;
+  --color-fiber: #3fe0ff;
+  --color-fog: #8e8e9d;
+
+  --font-display: 'Archivo', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* ——— animations ——— */
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 0.9s ease-out both;
+  --animate-scale-in: scale-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-pulse-dot: pulse-dot 1.6s ease-in-out infinite;
+  --animate-pulse-dot-cyan: pulse-dot-cyan 1.6s ease-in-out infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.92);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 1;
+      box-shadow: 0 0 0 0 rgb(255 184 77 / 0.55);
+    }
+    50% {
+      opacity: 0.75;
+      box-shadow: 0 0 0 7px rgb(255 184 77 / 0);
+    }
+  }
+  @keyframes pulse-dot-cyan {
+    0%,
+    100% {
+      opacity: 1;
+      box-shadow: 0 0 0 0 rgb(63 224 255 / 0.5);
+    }
+    50% {
+      opacity: 0.75;
+      box-shadow: 0 0 0 7px rgb(63 224 255 / 0);
+    }
+  }
+}
+
+@utility bg-blueprint {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.03) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@layer base {
+  body {
+    @apply bg-ink font-display text-white antialiased;
+  }
+  ::selection {
+    background: rgb(255 184 77 / 0.25);
+  }
+}
