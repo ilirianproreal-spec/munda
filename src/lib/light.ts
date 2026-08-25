@@ -1,5 +1,15 @@
 import type { Led, MaterialId, FiberConfigId } from '../types';
 import { MATERIALS, FIBER_CONFIGS } from '../data/lab';
+import type { TKey } from './translations';
+
+/** Score → grade label. A level passes by meeting its objectives, not by score. */
+export function gradeFor(total: number): TKey {
+  if (total >= 90) return 'grade_master';
+  if (total >= 80) return 'grade_excellent';
+  if (total >= 70) return 'grade_good';
+  if (total >= 60) return 'grade_passed';
+  return 'grade_needs_improvement';
+}
 
 export interface LabMetrics {
   uniformity: number; // 0..100

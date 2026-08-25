@@ -2,11 +2,12 @@ import { Check, CircleDot, Lock } from 'lucide-react';
 import { TopBar } from '../components/layout/TopBar';
 import { DoorPanel } from '../components/lab/DoorPanel';
 import { LedControls } from '../components/lab/LedControls';
+import { LevelObjectivePanel } from '../components/lab/LevelObjectivePanel';
 import { MaterialPicker } from '../components/lab/MaterialPicker';
 import { FiberPicker } from '../components/lab/FiberPicker';
 import { ProjectStats } from '../components/lab/ProjectStats';
 import { TestReport } from '../components/lab/TestReport';
-import { MAX_LEDS } from '../data/lab';
+import { ProductReveal } from '../components/lab/ProductReveal';
 import { LEVELS } from '../data/levels';
 import { useLabStore } from '../store/labStore';
 import { useT } from '../lib/translations';
@@ -48,7 +49,7 @@ export function DesignLabScreen() {
             <span className="inline-block size-1.5 animate-pulse-dot rounded-full bg-electric" />
             {t('level')} {currentLevel}/5 · {t('active_config')}
             <span className="text-white">
-              {ledCount}/{MAX_LEDS} LED
+              {ledCount}/{levelDef.maxLeds} LED
             </span>
           </div>
         </header>
@@ -142,6 +143,7 @@ export function DesignLabScreen() {
           )}
         >
           <div className="space-y-5">
+            <LevelObjectivePanel />
             <LedControls />
             <MaterialPicker />
             <FiberPicker />
@@ -151,6 +153,7 @@ export function DesignLabScreen() {
         </div>
 
         <TestReport />
+        <ProductReveal />
       </main>
     </div>
   );

@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { PointerEvent as RPointerEvent, MouseEvent as RMouseEvent } from 'react';
-import { PANEL, MATERIALS, FIBER_CONFIGS, FIBER_ANCHORS, MAX_LEDS } from '../../data/lab';
+import { PANEL, MATERIALS, FIBER_CONFIGS, FIBER_ANCHORS } from '../../data/lab';
+import { LEVELS } from '../../data/levels';
 import { useLabStore } from '../../store/labStore';
 import { clamp, ledRadius, PANEL_PATH, strandPath, computeMetrics } from '../../lib/light';
 import { renderHeatmap, renderTestAnimation } from '../../lib/heatmap';
@@ -26,6 +27,13 @@ export function DoorPanel() {
   const selectLed = useLabStore((s) => s.selectLed);
   const testPhase = useLabStore((s) => s.testPhase);
   const finishTest = useLabStore((s) => s.finishTest);
+  const currentLevel = useLabStore((s) => s.currentLevel);
+  const levelDef = LEVELS[currentLevel - 1] ?? LEVELS[0];
+
+  const metrics = useMemo(
+    () => computeMetrics(leds, material, fiberConfig),
+    [leds, material, fiberConfig],
+  );
 
   const svgRef = useRef<SVGSVGElement | null>(null);
   const dragRef = useRef<{ id: string; dx: number; dy: number } | null>(null);
@@ -121,7 +129,7 @@ export function DoorPanel() {
       return;
     }
     const p = toPanel(e);
-    if (leds.length >= MAX_LEDS) {
+    if (leds.length >= levelDef.maxLeds) {
       selectLed(null);
       return;
     }
@@ -280,6 +288,72 @@ export function DoorPanel() {
             onClick={handlePanelClick}
             className="cursor-crosshair"
           />
+
+          {/* Level 1: target zone */}
+          {currentLevel === 1 && (
+            <g pointerEvents="none">
+              <rect
+                x={108}
+                y={168}
+                width={184}
+                height={304}
+                rx={18}
+                fill="rgba(0,229,255,0.05)"
+                stroke="rgba(0,229,255,0.5)"
+                strokeWidth={1.2}
+                strokeDasharray="5 5"
+                className="animate-pulse-soft"
+              />
+              <rect x={108} y={168} width={184} height={304} rx={18} fill="none" stroke="rgba(125,247,255,0.12)" strokeWidth={6} />
+              <text
+                x={200}
+                y={160}
+                textAnchor="middle"
+                fill="rgba(125,247,255,0.8)"
+                fontSize={8}
+                fontFamily="'JetBrains Mono', monospace"
+                letterSpacing={2}
+              >
+                {t('target_zone')}
+              </text>
+              <text
+                x={200}
+                y={332}
+                textAnchor="middle"
+                fill="rgba(125,247,255,0.95)"
+                fontSize={15}
+                fontFamily="'JetBrains Mono', monospace"
+                fontWeight={700}
+              >
+                {Math.round(metrics.uniformity)}%
+              </text>
+              <text
+                x={200}
+                y={350}
+                textAnchor="middle"
+                fill="rgba(255,255,255,0.45)"
+                fontSize={7}
+                fontFamily="'JetBrains Mono', monospace"
+                letterSpacing={2}
+              >
+                ≥ 75%
+              </text>
+              {metrics.uniformity >= 75 && (
+                <text
+                  x={200}
+                  y={378}
+                  textAnchor="middle"
+                  fill="#00e5ff"
+                  fontSize={8}
+                  fontFamily="'JetBrains Mono', monospace"
+                  letterSpacing={2}
+                  className="animate-pop"
+                >
+                  ✓ {t('target_reached').toUpperCase()}
+                </text>
+              )}
+            </g>
+          )}
 
           <g
             clipPath="url(#panel-clip)"

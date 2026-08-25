@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, XCircle, AlertTriangle, Wrench, ArrowRight, Check } from 'lucide-react';
+import { CheckCircle2, XCircle, AlertTriangle, Wrench, ArrowRight, Package } from 'lucide-react';
 import { useLabStore } from '../../store/labStore';
 import { GlowButton } from '../ui/GlowButton';
 import { LEVELS, evaluateLevel } from '../../data/levels';
+import { gradeFor } from '../../lib/light';
 import { useT } from '../../lib/translations';
 import { play } from '../../lib/sound';
 import { cn } from '../../lib/cn';
@@ -16,11 +17,13 @@ export function TestReport() {
   const currentLevel = useLabStore((s) => s.currentLevel);
   const completeLevel = useLabStore((s) => s.completeLevel);
   const setLevel = useLabStore((s) => s.setLevel);
+  const revealProduct = useLabStore((s) => s.revealProduct);
 
   const level = LEVELS[currentLevel - 1] ?? LEVELS[0];
   const evaluation = report ? evaluateLevel(level, report) : null;
   const passed = evaluation?.passed ?? false;
   const isLast = level.id === LEVELS.length;
+  const gradeKey = report ? gradeFor(report.total) : 'grade_needs_improvement';
 
   useEffect(() => {
     if (phase === 'report' && report) play(passed ? 'pass' : 'fail');
@@ -44,7 +47,7 @@ export function TestReport() {
     if (!isLast) {
       setLevel(level.id + 1);
     } else {
-      exitTest();
+      revealProduct();
     }
   };
 
@@ -88,18 +91,26 @@ export function TestReport() {
           </div>
           <ul className="space-y-2.5">
             {criteria.map((c) => (
-              <li key={c.labelKey} className="flex items-center justify-between gap-3">
-                <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-fog">
-                  {c.met ? (
-                    <CheckCircle2 className="size-3.5 shrink-0 text-electric" />
-                  ) : (
-                    <XCircle className="size-3.5 shrink-0 text-violet-bright" />
-                  )}
-                  {t(c.labelKey)}
-                </span>
-                <span className="shrink-0 font-mono text-[10px] text-white">
-                  {c.value} <span className="text-fog/60">/ {c.target}</span>
-                </span>
+              <li key={c.labelKey}>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-fog">
+                    {c.met ? (
+                      <CheckCircle2 className="size-3.5 shrink-0 text-electric" />
+                    ) : (
+                      <XCircle className="size-3.5 shrink-0 text-violet-bright" />
+                    )}
+                    {t(c.labelKey)}
+                  </span>
+                  <span className="shrink-0 font-mono text-[10px] text-white">
+                    {c.value} <span className="text-fog/60">/ {c.target}</span>
+                  </span>
+                </div>
+                {!c.met && c.need && (
+                  <div className="mt-1 flex items-center gap-1.5 pl-5 font-mono text-[10px] text-violet-bright">
+                    <AlertTriangle className="size-3 shrink-0" />
+                    {t(c.need.key).replace('{n}', String(c.need.n))}
+                  </div>
+                )}
               </li>
             ))}
           </ul>
@@ -131,6 +142,25 @@ export function TestReport() {
             {Math.round(report.total)}
             <span className="text-2xl text-fog">/100</span>
           </div>
+
+          {/* score grade */}
+          <div
+            className={cn(
+              'mt-3 inline-flex items-center gap-2 border px-3 py-1 font-mono text-[10px] uppercase tracking-[0.25em]',
+              gradeKey === 'grade_master'
+                ? 'border-electric/60 bg-electric/10 text-electric'
+                : gradeKey === 'grade_excellent'
+                  ? 'border-electric-bright/50 bg-electric-bright/10 text-electric-bright'
+                  : gradeKey === 'grade_good'
+                    ? 'border-violet-bright/50 bg-violet-bright/10 text-violet-bright'
+                    : gradeKey === 'grade_passed'
+                      ? 'border-white/30 bg-white/5 text-white'
+                      : 'border-violet/50 bg-violet/10 text-violet-bright',
+            )}
+          >
+            {t(gradeKey)}
+          </div>
+
           <div
             className={cn(
               'mt-4 inline-flex items-center gap-2 border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.3em]',
@@ -154,8 +184,8 @@ export function TestReport() {
               <GlowButton onClick={handlePass} className="w-full">
                 {isLast ? (
                   <>
-                    <Check className="size-4" />
-                    {t('report_finish')}
+                    <Package className="size-4" />
+                    {t('view_product')}
                   </>
                 ) : (
                   <>
