@@ -1,8 +1,8 @@
 import { Layers } from 'lucide-react';
 import { MATERIALS } from '../../data/lab';
 import { useLabStore } from '../../store/labStore';
-import { play } from '../../utils/sound';
-import { cn } from '../../utils/cn';
+import { play } from '../../lib/sound';
+import { cn } from '../../lib/cn';
 
 export function MaterialPicker() {
   const material = useLabStore((s) => s.material);

@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { cn } from '../../utils/cn';
-import { play } from '../../utils/sound';
+import { cn } from '../../lib/cn';
+import { play } from '../../lib/sound';
 
 interface GlowButtonProps {
   children: ReactNode;

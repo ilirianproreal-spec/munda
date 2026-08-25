@@ -9,8 +9,8 @@ import { TestReport } from '../components/lab/TestReport';
 import { MAX_LEDS } from '../data/lab';
 import { LEVELS } from '../data/levels';
 import { useLabStore } from '../store/labStore';
-import { play } from '../utils/sound';
-import { cn } from '../utils/cn';
+import { play } from '../lib/sound';
+import { cn } from '../lib/cn';
 
 export function DesignLabScreen() {
   const ledCount = useLabStore((s) => s.leds.length);

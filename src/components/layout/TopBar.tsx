@@ -4,8 +4,8 @@ import { APP_VERSION } from '../../data/lab';
 import { LogoMark } from './LogoMark';
 import { StatusLight } from '../ui/StatusLight';
 import { useSettingsStore } from '../../store/settingsStore';
-import { play } from '../../utils/sound';
-import { cn } from '../../utils/cn';
+import { play } from '../../lib/sound';
+import { cn } from '../../lib/cn';
 
 export function TopBar() {
   const soundOn = useSettingsStore((s) => s.soundOn);
@@ -14,7 +14,7 @@ export function TopBar() {
   return (
     <header className="fixed inset-x-0 top-0 z-40 border-b border-white/5 bg-ink/60 backdrop-blur-xl">
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-6">
-        <Link to="/" className="flex items-center gap-3 text-white">
+        <Link to="/light-lab" className="flex items-center gap-3 text-white">
           <LogoMark className="h-7 w-7 text-electric" />
           <span className="font-display text-sm font-extrabold tracking-[0.28em]">
             MUNDA <span className="text-electric">LIGHT LAB</span>

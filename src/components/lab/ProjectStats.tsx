@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { Play } from 'lucide-react';
-import { computeMetrics } from '../../utils/light';
+import { computeMetrics } from '../../lib/light';
 import { useLabStore } from '../../store/labStore';
 import { GlowButton } from '../ui/GlowButton';
-import { play } from '../../utils/sound';
-import { cn } from '../../utils/cn';
+import { play } from '../../lib/sound';
+import { cn } from '../../lib/cn';
 
 const METRICS = [
   {

@@ -1,8 +1,8 @@
 import { Network } from 'lucide-react';
 import { FIBER_CONFIGS } from '../../data/lab';
 import { useLabStore } from '../../store/labStore';
-import { play } from '../../utils/sound';
-import { cn } from '../../utils/cn';
+import { play } from '../../lib/sound';
+import { cn } from '../../lib/cn';
 
 export function FiberPicker() {
   const fiberConfig = useLabStore((s) => s.fiberConfig);

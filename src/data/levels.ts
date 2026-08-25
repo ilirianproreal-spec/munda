@@ -1,4 +1,4 @@
-import type { LabMetrics } from '../utils/light';
+import type { LabMetrics } from '../lib/light';
 
 export interface LevelCriterion {
   label: string;

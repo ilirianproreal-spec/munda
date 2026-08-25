@@ -2,8 +2,8 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Led, MaterialId, FiberConfigId } from '../types';
 import { MAX_LEDS, PANEL } from '../data/lab';
-import { clamp } from '../utils/light';
-import type { LabMetrics } from '../utils/light';
+import { clamp } from '../lib/light';
+import type { LabMetrics } from '../lib/light';
 
 const MARGIN = 26;
 

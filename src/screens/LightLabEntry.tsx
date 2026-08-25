@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import type { Variants } from 'framer-motion';
-import { Play, HelpCircle } from 'lucide-react';
+import { Play, HelpCircle, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { TopBar } from '../components/layout/TopBar';
 import { LightField } from '../components/fx/LightField';
 import { GlowButton } from '../components/ui/GlowButton';
@@ -17,7 +18,7 @@ const item: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 };
 
-export function HomeScreen() {
+export default function LightLabEntry() {
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-ink">
       <LightField className="absolute inset-0 h-full w-full" />
@@ -29,6 +30,14 @@ export function HomeScreen() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(5,5,8,0.92)_100%)]" />
 
       <TopBar />
+
+      <Link
+        to="/"
+        className="absolute left-6 top-20 z-30 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-fog transition-colors hover:text-electric"
+      >
+        <ArrowLeft className="size-3.5" />
+        Back to MUNDA
+      </Link>
 
       <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col items-center justify-center px-6 pb-12 pt-28 text-center">
         <motion.div
@@ -62,11 +71,11 @@ export function HomeScreen() {
           </motion.p>
 
           <motion.div variants={item} className="mt-12 flex flex-col items-center gap-4 sm:flex-row">
-            <GlowButton to="/lab">
+            <GlowButton to="/light-lab/lab">
               <Play className="size-4 fill-current" />
               Fillimi
             </GlowButton>
-            <GlowButton to="/how" variant="glass">
+            <GlowButton to="/light-lab/how" variant="glass">
               <HelpCircle className="size-4" />
               Si funksionon?
             </GlowButton>

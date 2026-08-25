@@ -4,8 +4,8 @@ import { CheckCircle2, XCircle, AlertTriangle, Wrench, ArrowRight, Check } from 
 import { useLabStore } from '../../store/labStore';
 import { GlowButton } from '../ui/GlowButton';
 import { LEVELS, evaluateLevel } from '../../data/levels';
-import { play } from '../../utils/sound';
-import { cn } from '../../utils/cn';
+import { play } from '../../lib/sound';
+import { cn } from '../../lib/cn';
 
 export function TestReport() {
   const phase = useLabStore((s) => s.testPhase);

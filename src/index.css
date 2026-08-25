@@ -160,6 +160,12 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  section[id] {
+    scroll-margin-top: 4.5rem;
+  }
   body {
     @apply bg-ink font-display text-white antialiased;
   }

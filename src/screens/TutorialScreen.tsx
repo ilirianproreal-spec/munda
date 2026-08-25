@@ -4,7 +4,7 @@ import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { TopBar } from '../components/layout/TopBar';
 import { GlowButton } from '../components/ui/GlowButton';
 import { LEDArt, FiberArt, TextileArt, OptimizeArt } from '../components/fx/TutorialArt';
-import { cn } from '../utils/cn';
+import { cn } from '../lib/cn';
 
 const STEPS = [
   {
@@ -120,7 +120,7 @@ export function TutorialScreen() {
           )}
 
           {last ? (
-            <GlowButton to="/lab">
+            <GlowButton to="/light-lab/lab">
               Filloni laboratorin
               <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
             </GlowButton>

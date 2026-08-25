@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import type { PointerEvent as RPointerEvent, MouseEvent as RMouseEvent } from 'react';
 import { PANEL, MATERIALS, FIBER_CONFIGS, FIBER_ANCHORS, MAX_LEDS } from '../../data/lab';
 import { useLabStore } from '../../store/labStore';
-import { clamp, ledRadius, PANEL_PATH, strandPath, computeMetrics } from '../../utils/light';
-import { renderHeatmap, renderTestAnimation } from '../../utils/heatmap';
-import { play } from '../../utils/sound';
-import { cn } from '../../utils/cn';
+import { clamp, ledRadius, PANEL_PATH, strandPath, computeMetrics } from '../../lib/light';
+import { renderHeatmap, renderTestAnimation } from '../../lib/heatmap';
+import { play } from '../../lib/sound';
+import { cn } from '../../lib/cn';
 import type { Led } from '../../types';
 
 const M = PANEL;

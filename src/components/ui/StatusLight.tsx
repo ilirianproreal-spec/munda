@@ -1,4 +1,4 @@
-import { cn } from '../../utils/cn';
+import { cn } from '../../lib/cn';
 
 const TONES = {
   electric: 'bg-electric animate-pulse-dot',

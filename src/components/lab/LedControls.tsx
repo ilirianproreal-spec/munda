@@ -1,7 +1,7 @@
 import { Trash2, CircleDot } from 'lucide-react';
 import { useLabStore } from '../../store/labStore';
-import { play } from '../../utils/sound';
-import { cn } from '../../utils/cn';
+import { play } from '../../lib/sound';
+import { cn } from '../../lib/cn';
 
 const SWATCHES = [
   '#ffffff',
