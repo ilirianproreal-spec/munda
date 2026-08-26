@@ -132,7 +132,7 @@ function buildSummaryHtml(
   td:first-child { color: var(--fog); font-family: Consolas, monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; }
   td:last-child { text-align: right; font-weight: 600; }
   .bar { height: 6px; border-radius: 4px; background: rgba(255,255,255,0.08); overflow: hidden; margin-top: 4px; }
-  .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--violet), var(--electric)); }
+  .bar i { display: block; height: 100%; background: var(--electric); }
   .metric { margin-bottom: 12px; }
   .metric .lbl { display: flex; justify-content: space-between; font-family: Consolas, monospace; font-size: 10px; letter-spacing: 0.12em; color: var(--fog); text-transform: uppercase; }
   .metric .lbl b { color: #fff; }
@@ -244,7 +244,7 @@ export function FinalReveal() {
   const phase = useLabStore((s) => s.testPhase);
   const product = useLabStore((s) => s.product);
   const showProductView = useLabStore((s) => s.showProductView);
-  const exitProduct = useLabStore((s) => s.exitProduct);
+  const toGlobal = useLabStore((s) => s.toGlobal);
 
   const dominantColor = useMemo(() => {
     const counts = new Map<string, number>();
@@ -338,7 +338,8 @@ export function FinalReveal() {
 
   const handleBack = () => {
     play('click');
-    exitProduct();
+    // chapter 05 QUALITY is complete — continue to chapter 06 GLOBAL
+    toGlobal();
   };
 
   /* ————— intro (PROJECT COMPLETE) ————— */

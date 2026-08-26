@@ -13,7 +13,7 @@ export function FiberPicker() {
   return (
     <div className="glass p-5">
       <div className="mb-3 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.3em] text-fog">
-        <Network className="size-3.5 text-violet" />
+        <Network className="size-3.5 text-electric" />
         {t('fiber_config')}
       </div>
       <div className="space-y-2">
@@ -28,7 +28,7 @@ export function FiberPicker() {
             className={cn(
               'flex w-full items-center justify-between gap-3 border px-3 py-2.5 text-left transition-colors duration-200',
               fiberConfig === f.id
-                ? 'border-violet/70 bg-violet/10'
+                ? 'border-electric/70 bg-electric/10'
                 : 'border-white/10 hover:border-white/30',
             )}
           >
@@ -36,7 +36,7 @@ export function FiberPicker() {
               <span
                 className={cn(
                   'block font-display text-[11px] font-bold uppercase tracking-[0.15em]',
-                  fiberConfig === f.id ? 'text-violet-bright' : 'text-white',
+                  fiberConfig === f.id ? 'text-electric' : 'text-white',
                 )}
               >
                 {t(f.nameKey)}

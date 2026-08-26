@@ -35,7 +35,7 @@ export function LevelObjectivePanel() {
           <span className="font-mono text-[9px] tracking-[0.2em] text-fog/60">
             {t('level_prefix')} {currentLevel}
           </span>
-          <span className="border border-violet/40 bg-violet/10 px-1.5 py-0.5 font-mono text-[8px] tracking-[0.2em] text-violet-bright">
+          <span className="border border-white/20 bg-white/5 px-1.5 py-0.5 font-mono text-[8px] tracking-[0.2em] text-white/70">
             {t(level.difficultyKey)}
           </span>
         </span>
@@ -74,7 +74,7 @@ export function LevelObjectivePanel() {
               <div
                 className={cn(
                   'h-full rounded-full transition-all duration-500',
-                  c.met ? 'bg-electric shadow-[0_0_8px_rgba(0,229,255,0.6)]' : 'bg-violet/70',
+                  c.met ? 'bg-electric shadow-[0_0_8px_rgba(0,229,255,0.6)]' : 'bg-white/30',
                 )}
                 style={{ width: `${c.progress}%` }}
               />
@@ -115,9 +115,9 @@ export function LevelObjectivePanel() {
 
       {/* hint */}
       <div className="mt-3 flex gap-2.5 border border-white/10 bg-white/[0.03] px-3 py-2.5">
-        <Lightbulb className="size-4 shrink-0 text-violet-bright" />
+        <Lightbulb className="size-4 shrink-0 text-fog" />
         <div>
-          <div className="font-mono text-[9px] uppercase tracking-[0.25em] text-violet-bright">
+          <div className="font-mono text-[9px] uppercase tracking-[0.25em] text-fog">
             {t('tip')}
           </div>
           <p className="mt-1 text-xs leading-relaxed text-fog">{t(level.hintKey)}</p>

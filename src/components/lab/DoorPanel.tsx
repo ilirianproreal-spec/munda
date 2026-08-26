@@ -479,7 +479,7 @@ export function DoorPanel() {
             <div className="h-[2px] w-48 overflow-hidden rounded-full bg-white/10">
               <div
                 ref={testBarRef}
-                className="h-full bg-gradient-to-r from-violet via-electric to-white"
+                className="h-full bg-electric transition-all duration-500"
                 style={{ width: '0%' }}
               />
             </div>

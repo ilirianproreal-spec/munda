@@ -10,8 +10,8 @@ import { cn } from '../../lib/cn';
 const METRICS = [
   { key: 'uniformity', labelKey: 'metric_uniformity' as const, text: 'text-electric', bar: 'bg-electric' },
   { key: 'energy', labelKey: 'metric_energy' as const, text: 'text-electric-bright', bar: 'bg-electric-bright' },
-  { key: 'cost', labelKey: 'metric_cost' as const, text: 'text-violet-bright', bar: 'bg-violet' },
-  { key: 'design', labelKey: 'metric_design' as const, text: 'text-violet-bright', bar: 'bg-violet-bright' },
+  { key: 'cost', labelKey: 'metric_cost' as const, text: 'text-white', bar: 'bg-white/50' },
+  { key: 'design', labelKey: 'metric_design' as const, text: 'text-electric/80', bar: 'bg-electric/40' },
   { key: 'manufacturability', labelKey: 'metric_manufacturability' as const, text: 'text-white', bar: 'bg-white/70' },
 ] as const;
 
@@ -35,7 +35,7 @@ export function ProjectStats() {
       : m.total >= 60
         ? 'text-electric-bright'
         : m.total >= 40
-          ? 'text-violet-bright'
+          ? 'text-white'
           : 'text-fog';
 
   return (
@@ -86,7 +86,7 @@ export function ProjectStats() {
         </div>
         <div className="mt-4 h-1 overflow-hidden rounded-full bg-white/10">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-violet via-electric to-white transition-all duration-500"
+            className="h-full rounded-full bg-electric transition-all duration-500"
             style={{ width: `${m.total}%` }}
           />
         </div>

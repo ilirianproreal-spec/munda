@@ -119,7 +119,7 @@ export function TestReport() {
                     {c.met ? (
                       <CheckCircle2 className="size-3.5 shrink-0 text-electric" />
                     ) : (
-                      <XCircle className="size-3.5 shrink-0 text-violet-bright" />
+                      <XCircle className="size-3.5 shrink-0 text-fog" />
                     )}
                     {t(c.labelKey)}
                   </span>
@@ -128,7 +128,7 @@ export function TestReport() {
                   </span>
                 </div>
                 {!c.met && c.need && (
-                  <div className="mt-1 flex items-center gap-1.5 pl-5 font-mono text-[10px] text-violet-bright">
+                  <div className="mt-1 flex items-center gap-1.5 pl-5 font-mono text-[10px] text-fog">
                     <AlertTriangle className="size-3 shrink-0" />
                     {t(c.need.key).replace('{n}', String(c.need.n))}
                   </div>
@@ -152,13 +152,13 @@ export function TestReport() {
             <div
               className={cn(
                 'relative flex size-14 items-center justify-center rounded-full border',
-                passed ? 'border-electric/50 bg-electric/10' : 'border-violet/50 bg-violet/10',
+                passed ? 'border-electric/50 bg-electric/10' : 'border-white/25 bg-white/5',
               )}
             >
               {passed ? (
                 <CheckCircle2 className="size-7 animate-pop text-electric" />
               ) : (
-                <XCircle className="size-7 animate-shake text-violet-bright" />
+                <XCircle className="size-7 animate-shake text-white/80" />
               )}
             </div>
           </div>
@@ -169,7 +169,7 @@ export function TestReport() {
           <div
             className={cn(
               'mt-1 font-display text-6xl font-extrabold leading-none',
-              passed ? 'text-electric' : 'text-violet-bright',
+              passed ? 'text-electric' : 'text-white/80',
             )}
           >
             {shownScore}
@@ -185,10 +185,10 @@ export function TestReport() {
                 : gradeKey === 'grade_excellent'
                   ? 'border-electric-bright/50 bg-electric-bright/10 text-electric-bright'
                   : gradeKey === 'grade_good'
-                    ? 'border-violet-bright/50 bg-violet-bright/10 text-violet-bright'
-                    : gradeKey === 'grade_passed'
-                      ? 'border-white/30 bg-white/5 text-white'
-                      : 'border-violet/50 bg-violet/10 text-violet-bright',
+                    ? 'border-white/40 bg-white/5 text-white'
+                      : gradeKey === 'grade_passed'
+                        ? 'border-white/30 bg-white/5 text-white'
+                        : 'border-white/25 bg-white/5 text-fog',
             )}
           >
             {t(gradeKey)}
@@ -199,7 +199,7 @@ export function TestReport() {
               'mt-4 inline-flex items-center gap-2 border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.3em]',
               passed
                 ? 'border-electric/60 bg-electric/10 text-electric'
-                : 'border-violet/60 bg-violet/10 text-violet-bright',
+                : 'border-white/25 bg-white/5 text-fog',
             )}
           >
             {passed ? (

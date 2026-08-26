@@ -6,7 +6,7 @@ import { LEVELS } from '../data/levels';
 import { clamp } from '../lib/light';
 import type { LabMetrics } from '../lib/light';
 
-export type TestPhase = 'idle' | 'running' | 'report' | 'complete' | 'product';
+export type TestPhase = 'idle' | 'running' | 'report' | 'complete' | 'product' | 'global';
 
 export interface ProductSnapshot {
   leds: Led[];
@@ -42,6 +42,8 @@ interface LabState {
   revealProduct: () => void;
   showProductView: () => void;
   exitProduct: () => void;
+  toGlobal: () => void;
+  exitGlobal: () => void;
 }
 
 const MARGIN = 26;
@@ -149,6 +151,11 @@ export const useLabStore = create<LabState>()(
       showProductView: () => set({ testPhase: 'product' }),
 
       exitProduct: () => set({ testPhase: 'idle' }),
+
+      /** Chapter 06 — GLOBAL: closing cinematic overlay after the product reveal. */
+      toGlobal: () => set({ testPhase: 'global' }),
+
+      exitGlobal: () => set({ testPhase: 'idle' }),
     }),
     {
       name: 'munda-light-lab-v1',
