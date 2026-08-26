@@ -18,6 +18,13 @@ export function Footer() {
           {t('brand_full')}
         </span>
 
+        <a
+          href="mailto:welcome@munda.tech"
+          className="hidden font-mono text-[9px] uppercase tracking-[0.2em] text-fog/50 transition-colors hover:text-white md:inline"
+        >
+          welcome@munda.tech
+        </a>
+
         <nav className="flex items-center gap-6">
           <Link to="/" className="font-mono text-[10px] uppercase tracking-[0.25em] text-fog transition-colors hover:text-white">
             {t('nav_home')}

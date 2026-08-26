@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { PANEL_PATH, clamp } from '../../lib/light';
-import { GUIDE, shapeTranslate, pathLength, effectDuration } from '../../lib/doorPaths';
+import { GUIDE, GUIDE2, shapeTranslate, pathLength, effectDuration } from '../../lib/doorPaths';
 import type { LightDesign } from '../../store/designStore';
 import { cn } from '../../lib/cn';
 
@@ -11,24 +11,25 @@ interface Props {
 }
 
 /**
- * The door. One clean automotive door card; the light guide is integrated
- * in the trim and renders live: power, color, brightness, intensity,
- * effect and speed. Effects run on SMIL — smooth, realistic, no CSS.
+ * The door. One clean automotive door card with the textile light integrated
+ * in the trim — a main guide across the panel and a second short segment
+ * lower-right (like the two-piece production light). Everything renders live:
+ * power, color, brightness, intensity, effect and speed. Effects run on SMIL.
  */
 export function AudiDoor({ design, className }: Props) {
   const tr = shapeTranslate(GUIDE, 50);
-  const total = pathLength(GUIDE.d);
-  const len = total * 0.8; // the lit portion of the guide
   const b = design.brightness / 100;
   const on = design.power;
   const color = design.color;
-  const dash = `${len} ${total}`;
   const dur = effectDuration(design.effect, design.speed);
-  const d = GUIDE.d;
-  const trs = `translate(${tr.x} ${tr.y})`;
 
   const glowW = 3 * 2.2 + design.intensity * 0.14;
   const glowO = Math.min(0.5, 0.16 * b + design.intensity * 0.004 * b);
+
+  const guides = [
+    { d: GUIDE.d, tr: `translate(${tr.x} ${tr.y})` },
+    { d: GUIDE2.d, tr: 'translate(0 0)' },
+  ];
 
   return (
     <svg viewBox="0 0 400 640" className={cn('h-full w-full select-none', className)} role="img" aria-label="Automotive door with LED light guide">
@@ -63,45 +64,50 @@ export function AudiDoor({ design, className }: Props) {
         <circle cx={110} cy={520} r={2.5} fill="rgba(255,255,255,0.18)" />
       </g>
 
-      {/* the light — integrated in the trim */}
-      <g clipPath="url(#dd-clip)" transform={trs} opacity={on ? 1 : 0.02} style={{ transition: 'opacity 0.35s' }}>
-        {/* ambient pool on the door surface */}
-        <path d={d} fill="none" stroke={color} strokeWidth={46} strokeLinecap="round" opacity={0.1 * b} />
-
-        {/* halo */}
-        <path d={d} fill="none" stroke={color} strokeWidth={glowW} strokeLinecap="round" opacity={glowO}>
-          {on && design.effect === 'glow' && (
-            <animate attributeName="opacity" values="0.12;0.5;0.12" dur={dur} repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" />
-          )}
-        </path>
-
-        {/* guide body */}
-        <path d={d} fill="none" stroke={color} strokeWidth={3} strokeLinecap="round" strokeDasharray={dash} opacity={Math.max(0.25, b)}>
-          {on && design.effect === 'pulse' && (
-            <animate attributeName="opacity" values="0.22;1;0.22" dur={dur} repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" />
-          )}
-          {on && design.effect === 'flash' && (
-            <animate attributeName="opacity" values="0.05;1;0.05;1;0.05" keyTimes="0;0.12;0.25;0.38;1" dur={dur} repeatCount="indefinite" calcMode="spline" keySplines="0.3 0 0.7 1;0.3 0 0.7 1;0.3 0 0.7 1;0.3 0 0.7 1" />
-          )}
-        </path>
-
-        {/* bright core */}
-        <path d={d} fill="none" stroke="#ffffff" strokeWidth={1} strokeLinecap="round" strokeDasharray={dash} opacity={0.6 * b} />
-
-        {/* wave — a bright segment running along the guide */}
-        {on && design.effect === 'wave' && (
-          <path
-            d={d}
-            fill="none"
-            stroke="#ffffff"
-            strokeWidth={2.6}
-            strokeLinecap="round"
-            strokeDasharray={`${Math.max(18, len * 0.12)} ${len}`}
-            opacity={0.9}
-          >
-            <animate attributeName="stroke-dashoffset" from="0" to={-len} dur={dur} repeatCount="indefinite" calcMode="linear" />
-          </path>
-        )}
+      {/* the light — textile light integrated in the trim */}
+      <g opacity={on ? 1 : 0.02} style={{ transition: 'opacity 0.35s' }}>
+        {guides.map((g, i) => {
+          const total = pathLength(g.d);
+          const len = total * 0.8; // the lit portion of the guide
+          const dash = `${len} ${total}`;
+          return (
+            <g key={i} clipPath="url(#dd-clip)" transform={g.tr}>
+              {/* ambient pool on the door surface */}
+              <path d={g.d} fill="none" stroke={color} strokeWidth={46} strokeLinecap="round" opacity={0.1 * b} />
+              {/* halo */}
+              <path d={g.d} fill="none" stroke={color} strokeWidth={glowW} strokeLinecap="round" opacity={glowO}>
+                {design.effect === 'glow' && (
+                  <animate attributeName="opacity" values="0.12;0.5;0.12" dur={dur} repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" />
+                )}
+              </path>
+              {/* guide body */}
+              <path d={g.d} fill="none" stroke={color} strokeWidth={3} strokeLinecap="round" strokeDasharray={dash} opacity={Math.max(0.25, b)}>
+                {design.effect === 'pulse' && (
+                  <animate attributeName="opacity" values="0.22;1;0.22" dur={dur} repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" />
+                )}
+                {design.effect === 'flash' && (
+                  <animate attributeName="opacity" values="0.05;1;0.05;1;0.05" keyTimes="0;0.12;0.25;0.38;1" dur={dur} repeatCount="indefinite" calcMode="spline" keySplines="0.3 0 0.7 1;0.3 0 0.7 1;0.3 0 0.7 1;0.3 0 0.7 1" />
+                )}
+              </path>
+              {/* bright core */}
+              <path d={g.d} fill="none" stroke="#ffffff" strokeWidth={1} strokeLinecap="round" strokeDasharray={dash} opacity={0.6 * b} />
+              {/* wave — a bright segment running along the guide */}
+              {design.effect === 'wave' && (
+                <path
+                  d={g.d}
+                  fill="none"
+                  stroke="#ffffff"
+                  strokeWidth={2.6}
+                  strokeLinecap="round"
+                  strokeDasharray={`${Math.max(18, len * 0.12)} ${len}`}
+                  opacity={0.9}
+                >
+                  <animate attributeName="stroke-dashoffset" from="0" to={-len} dur={dur} repeatCount="indefinite" calcMode="linear" />
+                </path>
+              )}
+            </g>
+          );
+        })}
       </g>
 
       <text x={300} y={612} textAnchor="end" fill="rgba(255,255,255,0.2)" fontSize={8} fontFamily="'JetBrains Mono', monospace" letterSpacing={3}>

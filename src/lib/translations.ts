@@ -223,6 +223,13 @@ export const en = {
   home_fact:
     'Audi A3 Facelift 2024 — the first production vehicle in the world with MUNDA textile light systems in its door trims.',
   home_try: 'TRY LIGHT LAB',
+  hero_spec_vehicle_k: 'First production vehicle',
+  hero_spec_vehicle_v: 'Audi A3 — 2024',
+  hero_spec_jv_k: 'Joint venture',
+  hero_spec_jv_v: 'Aunde × Mentor',
+  hero_spec_est_k: 'Established',
+  hero_spec_est_v: '2019 · Erkrath, DE',
+  hero_scroll: 'Scroll',
   company_kicker: 'COMPANY',
   company_title: 'LIGHT, WOVEN INTO THE DOOR.',
   company_lead:
@@ -246,6 +253,61 @@ export const en = {
   company_awards: 'RECOGNITION',
   company_award_names: 'German Innovation Award 2023 · German Design Award 2024 · Light+Building Design Plus Winner',
   company_cta: 'ENTER THE LIGHT LAB',
+
+  /* home — technology & advantages sections */
+  tech_kicker: 'THE TECHNOLOGY',
+  land_tech_title: 'HOW THE LIGHT IS WOVEN',
+  tech_lead: 'Textile light systems: LED light sources coupled with a woven optical light guide.',
+  tech_step1_k: '01 — LED MODULE',
+  tech_step1_v:
+    'Monochrome, white or RGB LEDs with driver and thermal management; a mixer optic distributes the light onto the fibre ends.',
+  tech_step2_k: '02 — WOVEN LIGHT GUIDE (POF)',
+  tech_step2_v:
+    'Plastic optical fibres (POF) made of PMMA are woven with white polyester yarn into light-guiding fibre mats.',
+  tech_step3_k: '03 — LATERAL LIGHT EMISSION',
+  tech_step3_v:
+    'The fabric is activated with light-scattering structures where light should leave — covered by a top fabric, optionally with a diffuser and reflector layer.',
+  tech_step4_k: '04 — INTEGRATION',
+  tech_step4_v:
+    'The light guide needs less than 5 mm of space and drapes into almost any shape — light on large surfaces, free forms and dynamic scenarios.',
+  tech_video_caption: 'The textile light in motion — MUNDA on the Audi door',
+  adv_kicker: 'KEY ADVANTAGES',
+  adv_title: 'WHY TEXTILE LIGHT',
+  adv_space_k: 'SPACE & FLEXIBILITY',
+  adv_space_v:
+    'The light guide needs less than 5 mm and separates freely from the electronics — enabling upgrades even in facelifts.',
+  adv_cost_k: 'COST-EFFECTIVE · NO TOOLING',
+  adv_cost_v:
+    'No component-specific tool investment: economical even in small series, where injection moulding is not viable.',
+  adv_proto_k: 'FAST DEVELOPMENT',
+  adv_proto_v:
+    'Roll-to-roll production and tool-free technology mean short development times and series-near prototyping.',
+  adv_dynamic_k: 'DYNAMIC LIGHT',
+  adv_dynamic_v:
+    'Individual fibres assigned to different LED modules create dynamic light scenarios impossible with other technologies.',
+  adv_crash_k: 'CRASH SAFETY',
+  adv_crash_v:
+    'Flexible enough for crash-sensitive zones — large illuminated surfaces where other technologies are not permitted.',
+  ref_kicker: 'FIRST PRODUCTION VEHICLE',
+  ref_title: 'AUDI A3 — FACELIFT 2024',
+  ref_text:
+    'Audi is the first car manufacturer in the world to integrate MUNDA textile light systems into the door trims of a production vehicle — since summer 2024.',
+  ref_cta: 'DESIGN YOUR OWN DOOR LIGHT',
+
+  /* company — contact, parents, careers, imprint */
+  contact_kicker: 'CONTACT',
+  contact_title: 'TALK TO US',
+  contact_addr: 'Heinrich-Hertz-Straße 7, D-40699 Erkrath, Germany',
+  contact_sales_note: 'MUNDA develops — production and sales run through its parent companies AUNDE and MENTOR.',
+  careers_k: 'CAREERS',
+  careers_v:
+    'Open positions in Erkrath and at our plant in Pristina, Kosovo — applications: datenschutz@munda.tech',
+  parents_k: 'PARENT COMPANIES',
+  parents_v:
+    'AUNDE (1899) — one of the world’s leading automotive suppliers, 24,500+ employees, 117 plants in 28 countries. MENTOR (1920) — LED light systems, production on three continents, serving more than 40 countries.',
+  impressum_k: 'IMPRINT',
+  impressum_v:
+    'MUNDA Textile Light Systems GmbH · Heinrich-Hertz-Straße 7, D-40699 Erkrath · Commercial register: Amtsgericht Wuppertal HRA 30113 · VAT ID: DE325977853',
 
   /* light lab — controls & final */
   ctrl_shape: 'SHAPE',
@@ -676,6 +738,13 @@ export const al: Record<TKey, string> = {
   home_fact:
     'Audi A3 Facelift 2024 — automjeti i parë serik në botë me sistemet tekstile të dritës MUNDA në veshjet e dyerve.',
   home_try: 'PROVO LIGHT LAB',
+  hero_spec_vehicle_k: 'Automjeti i parë serik',
+  hero_spec_vehicle_v: 'Audi A3 — 2024',
+  hero_spec_jv_k: 'Sipërmarrje e përbashkët',
+  hero_spec_jv_v: 'Aunde × Mentor',
+  hero_spec_est_k: 'Themeluar',
+  hero_spec_est_v: '2019 · Erkrath, DE',
+  hero_scroll: 'Lëviz',
   company_kicker: 'KOMPANIA',
   company_title: 'DRITA, E ENDUR NË DERË.',
   company_lead:
@@ -699,6 +768,61 @@ export const al: Record<TKey, string> = {
   company_awards: 'ÇMIME',
   company_award_names: 'German Innovation Award 2023 · German Design Award 2024 · Light+Building Design Plus Winner',
   company_cta: 'HYR NË LIGHT LAB',
+
+  /* home — technology & advantages sections */
+  tech_kicker: 'TEKNOLOGJIA',
+  land_tech_title: 'SI ENDET DRITA',
+  tech_lead: 'Sistemet tekstile të ndriçimit: burime LED të lidhura me një përcjellës optik të endur.',
+  tech_step1_k: '01 — MODULI LED',
+  tech_step1_v:
+    'LED monokrom, i bardhë ose RGB me drejtues dhe menaxhim termik; një optikë përzierëse shpërndan dritën mbi skajet e fibrave.',
+  tech_step2_k: '02 — PËRCIELLËSI I ENDUR (POF)',
+  tech_step2_v:
+    'Fibra optike polimer (POF) prej PMMA enden me fije poliesteri të bardhë në mata fibrore përcjellëse drite.',
+  tech_step3_k: '03 — DALJA ANËSORE E DRITËS',
+  tech_step3_v:
+    'Pëlhura aktivizohet me struktura shpërndarëse aty ku drita duhet të dalë — e mbuluar me pëlhurë, opsionale me shtresë difuzore dhe reflektuese.',
+  tech_step4_k: '04 — INTEGRIMI',
+  tech_step4_v:
+    'Përcjellësi ka nevojë për më pak se 5 mm hapësirë dhe drapohet në pothuajse çdo formë — dritë në sipërfaqe të mëdha, forma të lira dhe skenarë dinamikë.',
+  tech_video_caption: 'Drita tekstile në lëvizje — MUNDA në derën Audi',
+  adv_kicker: 'AVANTAZHET KRYESORE',
+  adv_title: 'PSE DRITA TEKSTILE',
+  adv_space_k: 'HAPËSIRA & FLEKSIBILITETI',
+  adv_space_v:
+    'Përcjellësi kërkon më pak se 5 mm dhe ndahet lirisht nga elektronika — mundëson përmirësime edhe në facelift.',
+  adv_cost_k: 'KOSTO EFIKASE · PA KALLËPE',
+  adv_cost_v:
+    'Pa investim kallëpesh për komponentin: ekonomike edhe në seri të vogla, ku injektimi plastik nuk është i leverdisshëm.',
+  adv_proto_k: 'ZHVILLIM I SHPEJTË',
+  adv_proto_v:
+    'Prodhimi roll-to-roll dhe teknologjia pa kallëpe sjellin kohë të shkurtra zhvillimi dhe prototipim pothuajse serik.',
+  adv_dynamic_k: 'DRI TË DINAMIKE',
+  adv_dynamic_v:
+    'Fibra individuale të lidhura me module të ndryshme LED krijojnë skenarë dinamikë të pamundur me teknologji të tjera.',
+  adv_crash_k: 'SIGURIA NË PËRPLASJE',
+  adv_crash_v:
+    'Mjaft fleksibël për zonat e ndjeshme ndaj goditjeve — sipërfaqe të mëdha të ndriçuara ku teknologjitë e tjera nuk lejohen.',
+  ref_kicker: 'AUTOMJETI I PARË SERIK',
+  ref_title: 'AUDI A3 — FACELIFT 2024',
+  ref_text:
+    'Audi është prodhuesi i parë në botë që integron sistemet tekstile të dritës MUNDA në veshjet e dyerve të një automjeti serik — që nga vera e 2024-ës.',
+  ref_cta: 'DIZAJNO DRITËN TËNDE TË DERËS',
+
+  /* company — contact, parents, careers, imprint */
+  contact_kicker: 'KONTAKTI',
+  contact_title: 'NA KONTAKTONI',
+  contact_addr: 'Heinrich-Hertz-Straße 7, D-40699 Erkrath, Gjermani',
+  contact_sales_note: 'MUNDA zhvillon — prodhimi dhe shitjet bëhen përmes kompanive mëmë AUNDE dhe MENTOR.',
+  careers_k: 'KARRIERA',
+  careers_v:
+    'Vende të lira në Erkrath dhe në fabrikën tonë në Prishtinë, Kosovë — aplikimet: datenschutz@munda.tech',
+  parents_k: 'KOMPANITË MËMË',
+  parents_v:
+    'AUNDE (1899) — një nga furnizuesit kryesorë automotive në botë, mbi 24.500 punonjës, 117 fabrika në 28 vende. MENTOR (1920) — sisteme ndriçimi LED, prodhim në tri kontinente, në mbi 40 vende.',
+  impressum_k: 'IMPRESUMI',
+  impressum_v:
+    'MUNDA Textile Light Systems GmbH · Heinrich-Hertz-Straße 7, D-40699 Erkrath · Regjistri tregtar: Amtsgericht Wuppertal HRA 30113 · Numri i TVSH-së: DE325977853',
 
   /* light lab — controls & final */
   ctrl_shape: 'FORMA',

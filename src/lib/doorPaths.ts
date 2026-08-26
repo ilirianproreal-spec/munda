@@ -23,6 +23,9 @@ export const SHAPES: ShapeDef[] = [
 /** The guide currently shown on the door. */
 export const GUIDE = SHAPES[1]; // mid
 
+/** Second guide — a shorter segment lower-right, like the two-piece textile light. */
+export const GUIDE2 = { id: 'low-right', d: 'M 196 452 Q 260 438 322 448', axis: null, range: [0, 0] } as const;
+
 /** Position 0..100 → translate applied to the guide group. */
 export function shapeTranslate(s: ShapeDef, position: number): { x: number; y: number } {
   if (!s.axis) return { x: 0, y: 0 };

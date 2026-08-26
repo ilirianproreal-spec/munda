@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Mail, MapPin, Phone } from 'lucide-react';
 import { Navbar } from '../sections/Navbar';
 import { Footer } from '../sections/Footer';
 import { useT } from '../lib/translations';
 
 /**
  * COMPANY — short and serious. Verified content from munda.tech:
- * the joint venture, the technology, the Audi A3 door trim premiere.
+ * the joint venture, the technology, the Audi A3 door trim premiere,
+ * parent companies, contact and imprint.
  */
 export default function CompanyPage() {
   const t = useT();
@@ -17,6 +18,8 @@ export default function CompanyPage() {
     { k: t('company_what_k'), v: t('company_what_v') },
     { k: t('company_tech_k'), v: t('company_tech_v') },
     { k: t('company_network_k'), v: t('company_network_v') },
+    { k: t('parents_k'), v: t('parents_v') },
+    { k: t('careers_k'), v: t('careers_v') },
   ];
 
   const awards = [
@@ -62,7 +65,7 @@ export default function CompanyPage() {
               {t('company_focus_k')} — {t('company_kicker')}
             </div>
             <h2 className="mt-3 font-display text-2xl font-extrabold uppercase tracking-[0.08em] text-white">
-              Audi A3 — Facelift 2024
+              {t('ref_title')}
             </h2>
             <p className="mt-4 font-mono text-xs leading-relaxed tracking-[0.04em] text-fog">
               {t('company_focus_v')}
@@ -113,10 +116,53 @@ export default function CompanyPage() {
           </div>
         </motion.div>
 
+        {/* contact */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.55, duration: 0.7 }}
+          className="mt-12 border-t border-white/10 pt-10"
+        >
+          <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-electric">{t('contact_kicker')}</div>
+          <h2 className="mt-3 font-display text-2xl font-extrabold uppercase tracking-[0.08em] text-white">
+            {t('contact_title')}
+          </h2>
+
+          <div className="mt-6 space-y-3 font-mono text-xs tracking-[0.08em] text-fog">
+            <div className="flex items-center gap-3">
+              <MapPin className="size-4 shrink-0 text-electric/80" />
+              {t('contact_addr')}
+            </div>
+            <div className="flex items-center gap-3">
+              <Phone className="size-4 shrink-0 text-electric/80" />
+              <a href="tel:+4921195073730" className="transition-colors hover:text-white">
+                +49 211 9507373-0
+              </a>
+            </div>
+            <div className="flex items-center gap-3">
+              <Mail className="size-4 shrink-0 text-electric/80" />
+              <a href="mailto:welcome@munda.tech" className="transition-colors hover:text-white">
+                welcome@munda.tech
+              </a>
+            </div>
+          </div>
+
+          <p className="mt-6 max-w-xl font-mono text-[11px] leading-relaxed tracking-[0.05em] text-fog/70">
+            {t('contact_sales_note')}
+          </p>
+
+          <div className="mt-8 border-t border-white/10 pt-6">
+            <div className="font-mono text-[9px] uppercase tracking-[0.3em] text-fog/60">{t('impressum_k')}</div>
+            <p className="mt-2 max-w-2xl font-mono text-[10px] leading-relaxed tracking-[0.06em] text-fog/60">
+              {t('impressum_v')}
+            </p>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.65, duration: 0.7 }}
           className="mt-12"
         >
           <Link
