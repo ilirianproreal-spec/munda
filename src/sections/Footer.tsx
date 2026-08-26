@@ -14,6 +14,9 @@ export function Footer() {
           <LogoMark className="h-6 w-6 text-electric" />
           <span className="font-display text-sm font-extrabold tracking-[0.3em]">MUNDA</span>
         </Link>
+        <span className="hidden font-mono text-[9px] uppercase tracking-[0.2em] text-fog/50 lg:inline">
+          {t('brand_full')}
+        </span>
 
         <nav className="flex items-center gap-6">
           <Link to="/" className="font-mono text-[10px] uppercase tracking-[0.25em] text-fog transition-colors hover:text-white">

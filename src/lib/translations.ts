@@ -216,21 +216,35 @@ export const en = {
   /* website — home & company */
   nav_home: 'Home',
   nav_company: 'Company',
-  home_sub: 'Automotive LED Lighting',
-  home_lead: 'LED lighting systems, engineered into the doors of Audi vehicles.',
-  home_learn: 'LEARN ABOUT MUNDA',
+  brand_full: 'MUNDA Textile Light Systems GmbH',
+  home_sub: 'Textile Light Systems',
+  home_lead:
+    'MUNDA combines technical textiles with LED-based light technology — textile light, integrated into automotive interiors and beyond.',
+  home_fact:
+    'Audi A3 Facelift 2024 — the first production vehicle in the world with MUNDA textile light systems in its door trims.',
   home_try: 'TRY LIGHT LAB',
   company_kicker: 'COMPANY',
-  company_title: 'LIGHT, BUILT INTO THE DOOR.',
+  company_title: 'LIGHT, WOVEN INTO THE DOOR.',
   company_lead:
-    'Munda develops LED lighting systems for automotive doors — light that is engineered as part of the door itself.',
+    'MUNDA Textile Light Systems GmbH — founded in 2019 in Erkrath, Germany, as a joint venture of AUNDE and MENTOR. We develop textile lighting solutions: LED light sources coupled with woven light guides.',
   company_who_k: 'WHO WE ARE',
-  company_who_v: 'Munda develops LED lighting systems for the doors of Audi vehicles.',
+  company_who_v:
+    'MUNDA Textile Light Systems GmbH, founded in 2019 in Erkrath, Germany — a joint venture of AUNDE and MENTOR, combining technical textiles with LED-based lighting technology.',
   company_what_k: 'WHAT WE DO',
   company_what_v:
-    'We design and produce door lighting — LED modules, light guides and control, integrated into the door trim.',
+    'We develop textile light systems: one or more LEDs feed a woven textile light guide, lighting large surfaces, free shapes and dynamic scenarios — integrated into the door trims of production vehicles.',
   company_focus_k: 'FOCUS',
-  company_focus_v: 'Automotive LED lighting. Every design is seen on the real door before it is approved.',
+  company_focus_v:
+    'Automotive interior lighting. In summer 2024, the Audi A3 facelift became the world’s first production vehicle with MUNDA textile light in its door trims.',
+  company_tech_k: 'TECHNOLOGY',
+  company_tech_v:
+    'Tool-free, flexible and drapeable — the textile light guide illuminates surfaces where classic light technology reaches its limits, including crash-relevant zones.',
+  company_network_k: 'GLOBAL NETWORK',
+  company_network_v:
+    'Developed by MUNDA, produced by its parent companies — AUNDE, one of the world’s leading automotive suppliers, and MENTOR, specialist for product-integrated LED light.',
+  company_network_line: 'AUNDE — 117 plants in 28 countries · MENTOR — production on three continents, serving more than 40 countries',
+  company_awards: 'RECOGNITION',
+  company_award_names: 'German Innovation Award 2023 · German Design Award 2024 · Light+Building Design Plus Winner',
   company_cta: 'ENTER THE LIGHT LAB',
 
   /* light lab — controls & final */
@@ -655,21 +669,35 @@ export const al: Record<TKey, string> = {
   /* website — home & company */
   nav_home: 'Kryefaqja',
   nav_company: 'Kompania',
-  home_sub: 'Ndriçim LED Automotive',
-  home_lead: 'Sisteme ndriçimi LED, të inxhinieruara në dyert e automjeteve Audi.',
-  home_learn: 'NJIHU ME MUNDA',
+  brand_full: 'MUNDA Textile Light Systems GmbH',
+  home_sub: 'Sisteme Tekstile të Dritës',
+  home_lead:
+    'MUNDA bashkon tekstilet teknike me teknologjinë e dritës LED — dritë tekstile, e integruar në interierët automotive e më gjerë.',
+  home_fact:
+    'Audi A3 Facelift 2024 — automjeti i parë serik në botë me sistemet tekstile të dritës MUNDA në veshjet e dyerve.',
   home_try: 'PROVO LIGHT LAB',
   company_kicker: 'KOMPANIA',
-  company_title: 'DRITA, E NDËRTUAR NË DERË.',
+  company_title: 'DRITA, E ENDUR NË DERË.',
   company_lead:
-    'Munda zhvillon sisteme ndriçimi LED për dyert e automjeteve — dritë që inxhinierohet si pjesë e vetë derës.',
+    'MUNDA Textile Light Systems GmbH — themeluar në 2019 në Erkrath, Gjermani, si sipërmarrje e përbashkët e AUNDE dhe MENTOR. Zhvillojmë zgjidhje tekstile ndriçimi: burime LED të lidhura me përcjellës drite të endur.',
   company_who_k: 'KUSH JEMI',
-  company_who_v: 'Munda zhvillon sisteme ndriçimi LED për dyert e automjeteve Audi.',
+  company_who_v:
+    'MUNDA Textile Light Systems GmbH, themeluar në 2019 në Erkrath, Gjermani — sipërmarrje e përbashkët e AUNDE dhe MENTOR, që bashkon tekstilet teknike me teknologjinë e ndriçimit LED.',
   company_what_k: 'ÇFARË BËJMË',
   company_what_v:
-    'Projektojmë dhe prodhojmë ndriçim derash — module LED, light guide dhe kontroll, të integruara në veshjen e derës.',
+    'Zhvillojmë sisteme tekstile drite: një ose disa LED ushqejnë një përcjellës drite të endur, duke ndriçuar sipërfaqe të mëdha, forma të lira dhe skenarë dinamikë — të integruara në veshjet e dyerve të automjeteve serike.',
   company_focus_k: 'FOKUSI',
-  company_focus_v: 'Ndriçim LED automotive. Çdo dizajn shihet mbi derën reale përpara se të miratohet.',
+  company_focus_v:
+    'Ndriçimi i interierit automotive. Në verën e 2024-ës, Audi A3 facelift u bë automjeti i parë serik në botë me dritën tekstile MUNDA në veshjet e dyerve.',
+  company_tech_k: 'TEKNOLOGJIA',
+  company_tech_v:
+    'Pa kallëpe, fleksibël dhe i drapueshëm — përcjellësi tekstil i dritës ndriçon sipërfaqe ku teknologjitë klasike arrijnë kufirin, përfshirë zonat e ndjeshme ndaj përplasjes.',
+  company_network_k: 'RRJETI GLOBAL',
+  company_network_v:
+    'I zhvilluar nga MUNDA, i prodhuar nga kompanitë mëmë — AUNDE, një nga furnizuesit kryesorë automotive në botë, dhe MENTOR, specialist i dritës LED të integruar në produkt.',
+  company_network_line: 'AUNDE — 117 fabrika në 28 vende · MENTOR — prodhim në tri kontinente, në mbi 40 vende',
+  company_awards: 'ÇMIME',
+  company_award_names: 'German Innovation Award 2023 · German Design Award 2024 · Light+Building Design Plus Winner',
   company_cta: 'HYR NË LIGHT LAB',
 
   /* light lab — controls & final */

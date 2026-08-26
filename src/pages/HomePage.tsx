@@ -5,7 +5,7 @@ import { Navbar } from '../sections/Navbar';
 import { Footer } from '../sections/Footer';
 import { useT } from '../lib/translations';
 
-/** HOME — one minimal hero, one way forward: TRY LIGHT LAB. */
+/** HOME — MUNDA Textile Light Systems. One hero, one way forward. */
 export default function HomePage() {
   const t = useT();
 
@@ -14,12 +14,20 @@ export default function HomePage() {
       <Navbar />
 
       <main className="relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-6 pb-24 pt-32 text-center">
+        {/* background — textile light imagery from munda.tech */}
+        <div
+          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-35"
+          style={{ backgroundImage: "url('/images/hero-textile-light.jpg')" }}
+        />
+        <div className="pointer-events-none absolute inset-0 bg-ink/55" />
+
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="relative"
         >
-          <div className="font-mono text-[11px] uppercase tracking-[0.5em] text-white/40">
+          <div className="font-mono text-[11px] uppercase tracking-[0.5em] text-white/45">
             {t('home_sub')}
           </div>
 
@@ -33,8 +41,12 @@ export default function HomePage() {
             <div className="absolute inset-x-6 inset-y-0 rounded-full bg-electric/70" />
           </div>
 
-          <p className="mx-auto mt-8 max-w-xl font-mono text-sm leading-relaxed tracking-[0.08em] text-fog">
+          <p className="mx-auto mt-8 max-w-xl font-mono text-sm leading-relaxed tracking-[0.06em] text-fog">
             {t('home_lead')}
+          </p>
+
+          <p className="mx-auto mt-6 max-w-lg font-mono text-[10px] uppercase leading-relaxed tracking-[0.2em] text-electric/90">
+            {t('home_fact')}
           </p>
 
           <div className="mt-12">
