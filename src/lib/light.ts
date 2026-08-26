@@ -27,6 +27,21 @@ export interface LabMetrics {
 
 export const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
 
+/** '#00e5ff' → [0, 229, 255]. Accepts 3- and 6-digit hex. */
+export function hexToRgb(hex: string): [number, number, number] {
+  const h = hex.replace('#', '');
+  const n = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
+  const v = parseInt(n, 16);
+  if (Number.isNaN(v) || n.length !== 6) return [0, 229, 255];
+  return [(v >> 16) & 255, (v >> 8) & 255, v & 255];
+}
+
+/** '#00e5ff' + alpha → 'rgba(0,229,255,a)'. */
+export function rgba(hex: string, a: number): string {
+  const [r, g, b] = hexToRgb(hex);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
 /* panel geometry (viewBox 0 0 400 640) */
 const MIN_X = 60;
 const MAX_X = 340;

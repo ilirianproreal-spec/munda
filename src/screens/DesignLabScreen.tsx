@@ -7,7 +7,7 @@ import { MaterialPicker } from '../components/lab/MaterialPicker';
 import { FiberPicker } from '../components/lab/FiberPicker';
 import { ProjectStats } from '../components/lab/ProjectStats';
 import { TestReport } from '../components/lab/TestReport';
-import { ProductReveal } from '../components/lab/ProductReveal';
+import { FinalReveal } from '../components/lab/FinalReveal';
 import { LEVELS } from '../data/levels';
 import { useLabStore } from '../store/labStore';
 import { useT } from '../lib/translations';
@@ -153,7 +153,7 @@ export function DesignLabScreen() {
         </div>
 
         <TestReport />
-        <ProductReveal />
+        <FinalReveal />
       </main>
     </div>
   );

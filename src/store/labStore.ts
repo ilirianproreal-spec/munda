@@ -6,7 +6,7 @@ import { LEVELS } from '../data/levels';
 import { clamp } from '../lib/light';
 import type { LabMetrics } from '../lib/light';
 
-export type TestPhase = 'idle' | 'running' | 'report' | 'product';
+export type TestPhase = 'idle' | 'running' | 'report' | 'complete' | 'product';
 
 export interface ProductSnapshot {
   leds: Led[];
@@ -40,6 +40,7 @@ interface LabState {
   finishTest: (m: LabMetrics) => void;
   exitTest: () => void;
   revealProduct: () => void;
+  showProductView: () => void;
   exitProduct: () => void;
 }
 
@@ -141,8 +142,11 @@ export const useLabStore = create<LabState>()(
             s.report && s.leds.length > 0
               ? { leds: s.leds, material: s.material, fiberConfig: s.fiberConfig, metrics: s.report }
               : s.product,
-          testPhase: 'product',
+          // 'complete' = cinematic PROJECT COMPLETE intro, then showProductView()
+          testPhase: 'complete',
         })),
+
+      showProductView: () => set({ testPhase: 'product' }),
 
       exitProduct: () => set({ testPhase: 'idle' }),
     }),

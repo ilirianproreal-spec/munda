@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, XCircle, AlertTriangle, Wrench, ArrowRight, Package } from 'lucide-react';
+import { CheckCircle2, XCircle, AlertTriangle, Wrench, ArrowRight, Package, RotateCcw } from 'lucide-react';
 import { useLabStore } from '../../store/labStore';
 import { GlowButton } from '../ui/GlowButton';
 import { LEVELS, evaluateLevel } from '../../data/levels';
@@ -14,6 +14,7 @@ export function TestReport() {
   const phase = useLabStore((s) => s.testPhase);
   const report = useLabStore((s) => s.report);
   const exitTest = useLabStore((s) => s.exitTest);
+  const startTest = useLabStore((s) => s.startTest);
   const currentLevel = useLabStore((s) => s.currentLevel);
   const completeLevel = useLabStore((s) => s.completeLevel);
   const setLevel = useLabStore((s) => s.setLevel);
@@ -24,6 +25,27 @@ export function TestReport() {
   const passed = evaluation?.passed ?? false;
   const isLast = level.id === LEVELS.length;
   const gradeKey = report ? gradeFor(report.total) : 'grade_needs_improvement';
+
+  /* celebratory score count-up */
+  const [shownScore, setShownScore] = useState(0);
+  useEffect(() => {
+    if (phase !== 'report' || !report) {
+      setShownScore(0);
+      return;
+    }
+    const target = Math.round(report.total);
+    const start = performance.now();
+    const DUR = 950;
+    let raf = 0;
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - start) / DUR);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setShownScore(Math.round(target * eased));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [phase, report]);
 
   useEffect(() => {
     if (phase === 'report' && report) play(passed ? 'pass' : 'fail');
@@ -117,17 +139,28 @@ export function TestReport() {
         </div>
 
         <div className="mt-5 border-t border-white/10 pt-5">
-          <div
-            className={cn(
-              'mx-auto flex size-14 items-center justify-center rounded-full border',
-              passed ? 'border-electric/50 bg-electric/10' : 'border-violet/50 bg-violet/10',
+          <div className="relative mx-auto flex size-14 items-center justify-center">
+            {passed && (
+              <>
+                <span className="fr-ring absolute inset-0 rounded-full border border-electric/60" />
+                <span
+                  className="fr-ring absolute inset-0 rounded-full border border-electric/30"
+                  style={{ animationDelay: '0.55s' }}
+                />
+              </>
             )}
-          >
-            {passed ? (
-              <CheckCircle2 className="size-7 animate-pop text-electric" />
-            ) : (
-              <XCircle className="size-7 animate-shake text-violet-bright" />
-            )}
+            <div
+              className={cn(
+                'relative flex size-14 items-center justify-center rounded-full border',
+                passed ? 'border-electric/50 bg-electric/10' : 'border-violet/50 bg-violet/10',
+              )}
+            >
+              {passed ? (
+                <CheckCircle2 className="size-7 animate-pop text-electric" />
+              ) : (
+                <XCircle className="size-7 animate-shake text-violet-bright" />
+              )}
+            </div>
           </div>
 
           <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.3em] text-fog">
@@ -139,7 +172,7 @@ export function TestReport() {
               passed ? 'text-electric' : 'text-violet-bright',
             )}
           >
-            {Math.round(report.total)}
+            {shownScore}
             <span className="text-2xl text-fog">/100</span>
           </div>
 
@@ -200,10 +233,22 @@ export function TestReport() {
               </GlowButton>
             </>
           ) : (
-            <GlowButton onClick={exitTest} className="w-full">
-              <Wrench className="size-4" />
-              {t('optimize_design')}
-            </GlowButton>
+            <>
+              <GlowButton
+                onClick={() => {
+                  play('test');
+                  startTest();
+                }}
+                className="w-full"
+              >
+                <RotateCcw className="size-4" />
+                {t('try_again')}
+              </GlowButton>
+              <GlowButton onClick={exitTest} variant="glass" className="w-full">
+                <Wrench className="size-4" />
+                {t('optimize_design')}
+              </GlowButton>
+            </>
           )}
         </div>
       </motion.div>

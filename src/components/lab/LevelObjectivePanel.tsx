@@ -1,12 +1,15 @@
 import { useMemo } from 'react';
-import { CheckCircle2, XCircle, Lightbulb } from 'lucide-react';
+import { CheckCircle2, Circle, Lightbulb, Target } from 'lucide-react';
 import { useLabStore } from '../../store/labStore';
 import { computeMetrics } from '../../lib/light';
 import { LEVELS, evaluateLevel } from '../../data/levels';
 import { useT } from '../../lib/translations';
 import { cn } from '../../lib/cn';
 
-/** Live objectives panel for the current level: real-time checks, target indicator, hint. */
+/**
+ * Live objectives panel for the current level: every criterion gets a
+ * real-time progress bar, a ✓ TARGET REACHED state, and an all-reached banner.
+ */
 export function LevelObjectivePanel() {
   const t = useT();
   const currentLevel = useLabStore((s) => s.currentLevel);
@@ -20,9 +23,7 @@ export function LevelObjectivePanel() {
   );
 
   const level = LEVELS[currentLevel - 1] ?? LEVELS[0];
-  const { criteria } = evaluateLevel(level, metrics);
-  const target = criteria[0]; // uniformity target — always the first criterion
-  const targetReached = target.met;
+  const { criteria, passed } = evaluateLevel(level, metrics);
 
   return (
     <div className="glass border-l-2 border-electric p-5">
@@ -40,59 +41,84 @@ export function LevelObjectivePanel() {
         </span>
       </div>
 
-      <ul className="space-y-2.5">
+      {/* criteria with live progress */}
+      <ul className="space-y-3">
         {criteria.map((c) => (
-          <li key={c.labelKey} className="flex items-center justify-between gap-3">
-            <span
-              className={cn(
-                'flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em]',
-                c.met ? 'text-white' : 'text-fog',
-              )}
-            >
-              {c.met ? (
-                <CheckCircle2 className="size-3.5 shrink-0 text-electric" />
-              ) : (
-                <XCircle className="size-3.5 shrink-0 text-violet-bright" />
-              )}
-              {t(c.labelKey)}
-            </span>
-            <span
-              className={cn('shrink-0 font-mono text-[11px]', c.met ? 'text-electric' : 'text-fog')}
-            >
-              {c.value}
-            </span>
+          <li key={c.labelKey}>
+            <div className="flex items-center justify-between gap-3">
+              <span
+                className={cn(
+                  'flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em]',
+                  c.met ? 'text-white' : 'text-fog',
+                )}
+              >
+                {c.met ? (
+                  <CheckCircle2 className="size-3.5 shrink-0 text-electric" />
+                ) : (
+                  <Circle className="size-3.5 shrink-0 text-fog/50" />
+                )}
+                {t(c.labelKey)}
+              </span>
+              <span
+                className={cn(
+                  'shrink-0 font-mono text-[10px]',
+                  c.met ? 'text-electric' : 'text-fog',
+                )}
+              >
+                {c.value} <span className="text-fog/50">/ {c.target}</span>
+              </span>
+            </div>
+
+            {/* live progress toward the target */}
+            <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-white/10">
+              <div
+                className={cn(
+                  'h-full rounded-full transition-all duration-500',
+                  c.met ? 'bg-electric shadow-[0_0_8px_rgba(0,229,255,0.6)]' : 'bg-violet/70',
+                )}
+                style={{ width: `${c.progress}%` }}
+              />
+            </div>
+
+            {c.met && (
+              <div className="mt-1 flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-[0.2em] text-electric">
+                <CheckCircle2 className="size-2.5" />
+                ✓ {t('target_reached')}
+              </div>
+            )}
           </li>
         ))}
       </ul>
 
-      {/* target indicator */}
+      {/* all-reached banner */}
       <div
         className={cn(
-          'mt-4 border px-3 py-2.5 transition-colors duration-300',
-          targetReached ? 'border-electric/60 bg-electric/10' : 'border-white/10',
+          'mt-4 flex items-center gap-2.5 border px-3 py-2.5 transition-all duration-500',
+          passed
+            ? 'border-electric/60 bg-electric/10 shadow-[0_0_20px_rgba(0,229,255,0.2)]'
+            : 'border-white/10 bg-white/[0.02]',
         )}
       >
-        <div className="flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.2em] text-fog">
-          <span>{t('target')}</span>
-          <span>{t(target.labelKey)}</span>
-        </div>
-        {targetReached ? (
-          <div className="mt-1 animate-pop text-sm font-bold tracking-[0.05em] text-electric">
-            ✓ {t('target_reached')}
-          </div>
+        <Target
+          className={cn('size-4 shrink-0', passed ? 'text-electric' : 'text-fog/40')}
+        />
+        {passed ? (
+          <span className="animate-pop font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-electric">
+            ✓ {t('all_targets_reached')}
+          </span>
         ) : (
-          <div className="mt-1 font-mono text-xs text-white">
-            {target.value} <span className="text-fog/60">/ {target.target}</span>
-          </div>
+          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-fog/70">
+            {criteria.filter((c) => c.met).length}/{criteria.length} {t('target')}
+          </span>
         )}
       </div>
 
       {/* hint */}
-      <div className="mt-4 flex gap-2.5 border border-white/10 bg-white/[0.03] px-3 py-2.5">
+      <div className="mt-3 flex gap-2.5 border border-white/10 bg-white/[0.03] px-3 py-2.5">
         <Lightbulb className="size-4 shrink-0 text-violet-bright" />
         <div>
           <div className="font-mono text-[9px] uppercase tracking-[0.25em] text-violet-bright">
-            💡 {t('tip')}
+            {t('tip')}
           </div>
           <p className="mt-1 text-xs leading-relaxed text-fog">{t(level.hintKey)}</p>
         </div>
