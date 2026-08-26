@@ -5,7 +5,7 @@ import { Navbar } from '../sections/Navbar';
 import { Footer } from '../sections/Footer';
 import { useT } from '../lib/translations';
 
-/** HOME — one minimal hero: who Hermes is, and two ways forward. */
+/** HOME — one minimal hero, one way forward: TRY LIGHT LAB. */
 export default function HomePage() {
   const t = useT();
 
@@ -24,7 +24,7 @@ export default function HomePage() {
           </div>
 
           <h1 className="mt-6 font-display text-7xl font-extrabold tracking-[0.18em] text-white [text-shadow:0_0_60px_rgba(0,229,255,0.25)] sm:text-8xl">
-            HERMES
+            MUNDA
           </h1>
 
           {/* the light guide line */}
@@ -37,16 +37,10 @@ export default function HomePage() {
             {t('home_lead')}
           </p>
 
-          <div className="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link
-              to="/company"
-              className="inline-flex items-center gap-3 border border-white/20 px-8 py-3.5 font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-white/85 transition-colors duration-300 hover:border-white/45 hover:text-white"
-            >
-              {t('home_learn')}
-            </Link>
+          <div className="mt-12">
             <Link
               to="/light-lab"
-              className="group inline-flex items-center gap-3 bg-electric px-8 py-3.5 font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-ink shadow-[0_0_18px_rgba(0,229,255,0.35)] transition-all duration-300 hover:bg-electric-bright"
+              className="group inline-flex items-center gap-3 bg-electric px-9 py-3.5 font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-ink shadow-[0_0_18px_rgba(0,229,255,0.35)] transition-all duration-300 hover:bg-electric-bright"
             >
               {t('home_try')}
               <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-1" />

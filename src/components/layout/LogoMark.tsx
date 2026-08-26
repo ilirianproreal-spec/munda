@@ -21,9 +21,9 @@ export function LogoMark({ className }: { className?: string }) {
       />
       <circle cx="24" cy="22" r="3.2" fill="#00e5ff" />
       <circle cx="24" cy="22" r="6.5" stroke="#00e5ff" strokeOpacity="0.35" strokeWidth="1" />
-      <circle cx="15.5" cy="13.5" r="1.5" fill="#8b5cf6" />
-      <circle cx="33" cy="13.5" r="1.5" fill="#8b5cf6" />
-      <circle cx="24" cy="9.5" r="1.5" fill="#8b5cf6" />
+      <circle cx="15.5" cy="13.5" r="1.5" fill="#00e5ff" />
+      <circle cx="33" cy="13.5" r="1.5" fill="#00e5ff" />
+      <circle cx="24" cy="9.5" r="1.5" fill="#00e5ff" />
     </svg>
   );
 }

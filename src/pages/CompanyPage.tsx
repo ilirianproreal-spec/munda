@@ -5,7 +5,7 @@ import { Navbar } from '../sections/Navbar';
 import { Footer } from '../sections/Footer';
 import { useT } from '../lib/translations';
 
-/** COMPANY — short, serious. Who Hermes is, what it produces, its focus. */
+/** COMPANY — short, serious. Who Munda is, what it produces, its focus. */
 export default function CompanyPage() {
   const t = useT();
 

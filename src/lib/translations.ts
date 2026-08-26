@@ -186,8 +186,8 @@ export const en = {
   zone_b: 'ZONE B',
   zone_c: 'ZONE C',
 
-  /* cinematic journey — HERMES · Audi door lighting */
-  intro_kicker: 'HERMES — AUDI DOOR LIGHTING',
+  /* cinematic journey — MUNDA · Audi door lighting */
+  intro_kicker: 'MUNDA — AUDI DOOR LIGHTING',
   intro_question_1: 'CAN YOU SEE THE ENGINEERING',
   intro_question_2: 'BEHIND THE LIGHT?',
   intro_hint: 'MOVE — TOUCH THE LIGHT',
@@ -209,7 +209,7 @@ export const en = {
   global_title_2: 'IN EVERY DOOR.',
   global_network: 'SERIES 01 — DEPLOYMENT NETWORK',
   global_line: 'ONE LED LINE · FIFTY ENGINEERING DECISIONS',
-  global_for: 'PREPARED FOR HERMES',
+  global_for: 'PREPARED FOR MUNDA',
   global_return: 'RETURN TO THE LAB',
   global_exit: 'EXIT EXPERIENCE',
 
@@ -218,14 +218,14 @@ export const en = {
   nav_company: 'Company',
   home_sub: 'Automotive LED Lighting',
   home_lead: 'LED lighting systems, engineered into the doors of Audi vehicles.',
-  home_learn: 'LEARN ABOUT HERMES',
-  home_try: 'TRY THE LIGHT LAB',
+  home_learn: 'LEARN ABOUT MUNDA',
+  home_try: 'TRY LIGHT LAB',
   company_kicker: 'COMPANY',
   company_title: 'LIGHT, BUILT INTO THE DOOR.',
   company_lead:
-    'Hermes develops LED lighting systems for automotive doors — light that is engineered as part of the door itself.',
+    'Munda develops LED lighting systems for automotive doors — light that is engineered as part of the door itself.',
   company_who_k: 'WHO WE ARE',
-  company_who_v: 'Hermes develops LED lighting systems for the doors of Audi vehicles.',
+  company_who_v: 'Munda develops LED lighting systems for the doors of Audi vehicles.',
   company_what_k: 'WHAT WE DO',
   company_what_v:
     'We design and produce door lighting — LED modules, light guides and control, integrated into the door trim.',
@@ -238,6 +238,7 @@ export const en = {
   ctrl_position: 'POSITION',
   ctrl_color: 'COLOR',
   ctrl_brightness: 'BRIGHTNESS',
+  ctrl_intensity: 'INTENSITY',
   shape_top: 'TOP',
   shape_mid: 'MID',
   shape_lower: 'LOWER',
@@ -248,10 +249,31 @@ export const en = {
   edit: 'EDIT',
   reset: 'RESET',
   view_design: 'VIEW YOUR DESIGN',
-  drag_hint: 'DRAG TO TURN THE DOOR',
+  drag_hint: 'DRAG TO TURN · SCROLL TO ZOOM',
   how_works: 'HOW DOES THE LIGHT WORK?',
   how_text:
     'A small LED feeds a light guide — the guide carries the light along the door, and the trim reveals it.',
+
+  /* light lab — controls */
+  controls_header: 'LIGHT CONTROLS',
+  led_light: 'LED LIGHT',
+  power_on: 'ON',
+  power_off: 'OFF',
+  color_white: 'WHITE',
+  color_blue: 'BLUE',
+  color_red: 'RED',
+  color_amber: 'AMBER',
+  color_custom: 'CUSTOM',
+  effect_static: 'STATIC',
+  effect_pulse: 'PULSE',
+  effect_wave: 'WAVE',
+  effect_glow: 'GLOW',
+  effect_flash: 'FLASH',
+  ctrl_speed: 'SPEED',
+  light_section: 'LIGHT',
+  ctrl_pattern: 'EFFECT',
+  brand_name: 'MUNDA',
+  brand_light_lab: 'LIGHT LAB',
 
   /* materials */
   mat_textile_name: 'Textile',
@@ -603,8 +625,8 @@ export const al: Record<TKey, string> = {
   zone_b: 'ZONA B',
   zone_c: 'ZONA C',
 
-  /* cinematic journey — HERMES · Audi door lighting */
-  intro_kicker: 'HERMES — NDRIÇIMI I DERËS AUDI',
+  /* cinematic journey — MUNDA · Audi door lighting */
+  intro_kicker: 'MUNDA — NDRIÇIMI I DERËS AUDI',
   intro_question_1: 'A E SHEH INXHINIERINË',
   intro_question_2: 'PAS DRITËS?',
   intro_hint: 'LËVIZ — PREK DRITËN',
@@ -626,7 +648,7 @@ export const al: Record<TKey, string> = {
   global_title_2: 'NË ÇDO DERË.',
   global_network: 'SERIA 01 — RRJETI I DEPLOYIMIT',
   global_line: 'NJË VIJË LED · PESËDHJETË VENDIME INXHINIERIKE',
-  global_for: 'PËRGATITUR PËR HERMES',
+  global_for: 'PËRGATITUR PËR MUNDA',
   global_return: 'KTHEHU NË LAB',
   global_exit: 'DIL NGA EKSPERIENCA',
 
@@ -635,14 +657,14 @@ export const al: Record<TKey, string> = {
   nav_company: 'Kompania',
   home_sub: 'Ndriçim LED Automotive',
   home_lead: 'Sisteme ndriçimi LED, të inxhinieruara në dyert e automjeteve Audi.',
-  home_learn: 'NJIHU ME HERMES',
+  home_learn: 'NJIHU ME MUNDA',
   home_try: 'PROVO LIGHT LAB',
   company_kicker: 'KOMPANIA',
   company_title: 'DRITA, E NDËRTUAR NË DERË.',
   company_lead:
-    'Hermes zhvillon sisteme ndriçimi LED për dyert e automjeteve — dritë që inxhinierohet si pjesë e vetë derës.',
+    'Munda zhvillon sisteme ndriçimi LED për dyert e automjeteve — dritë që inxhinierohet si pjesë e vetë derës.',
   company_who_k: 'KUSH JEMI',
-  company_who_v: 'Hermes zhvillon sisteme ndriçimi LED për dyert e automjeteve Audi.',
+  company_who_v: 'Munda zhvillon sisteme ndriçimi LED për dyert e automjeteve Audi.',
   company_what_k: 'ÇFARË BËJMË',
   company_what_v:
     'Projektojmë dhe prodhojmë ndriçim derash — module LED, light guide dhe kontroll, të integruara në veshjen e derës.',
@@ -655,6 +677,7 @@ export const al: Record<TKey, string> = {
   ctrl_position: 'POZICIONI',
   ctrl_color: 'NGJYRA',
   ctrl_brightness: 'NDRIGIMI',
+  ctrl_intensity: 'INTENSITETI',
   shape_top: 'LART',
   shape_mid: 'MES',
   shape_lower: 'POSHT',
@@ -665,10 +688,31 @@ export const al: Record<TKey, string> = {
   edit: 'NDRYSHO',
   reset: 'RIFILLO',
   view_design: 'SHIH DIZAJNIN TËND',
-  drag_hint: 'ZVARRIJ PËR TA KTHYER DERËN',
+  drag_hint: 'ZVARRIJ PËR TA KTHYER · RROTA PËR ZOOM',
   how_works: 'SI PUNON DRITA?',
   how_text:
     'Një LED i vogël ushqen një light guide — guida e çon dritën përgjatë derës dhe veshja e tregon.',
+
+  /* light lab — controls */
+  controls_header: 'KONTROLLET E DRITËS',
+  led_light: 'DRITË LED',
+  power_on: 'ON',
+  power_off: 'OFF',
+  color_white: 'E BARDHË',
+  color_blue: 'BLU',
+  color_red: 'E KUQE',
+  color_amber: 'QELIBAR',
+  color_custom: 'E PERSONALIZUAR',
+  effect_static: 'STATIK',
+  effect_pulse: 'PULS',
+  effect_wave: 'VALË',
+  effect_glow: 'SHKËLQIM',
+  effect_flash: 'FLASH',
+  ctrl_speed: 'SHPEJTËSIA',
+  light_section: 'DRITA',
+  ctrl_pattern: 'EFEKTI',
+  brand_name: 'MUNDA',
+  brand_light_lab: 'LIGHT LAB',
 
   mat_textile_name: 'Tekstil',
   mat_textile_desc: 'Shpërndarje e gjerë e dritës',

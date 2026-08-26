@@ -9,7 +9,7 @@ import { play } from '../../lib/sound';
 /**
  * Chapter 06 — GLOBAL. The closing cinematic of the journey:
  * the same LED light guide, now in every door — Audi production sites,
- * the MUNDA engineering statement, and the HERMES dedication.
+ *  the MUNDA engineering statement, and the MUNDA dedication.
  */
 const PLANTS = ['INGOLSTADT', 'NECKARSULM', 'GYŐR', 'BRATISLAVA', 'MÉXICO', 'CHANGCHUN'];
 

@@ -7,7 +7,7 @@ import { useT } from '../../lib/translations';
 import { play } from '../../lib/sound';
 
 /**
- * Cinematic chapters 01–02 of the HERMES · Audi door lighting experience.
+ * Cinematic chapters 01–02 of the MUNDA · Audi door lighting experience.
  *
  * 01 THE LIGHT — a nearly black screen, one thin LED light guide, and the
  *     question "CAN YOU SEE THE ENGINEERING BEHIND THE LIGHT?". The pointer

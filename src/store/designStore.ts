@@ -2,36 +2,36 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 /**
- * HERMES Light Lab — one door, four controls, live preview.
- * No accounts, no server: the design persists locally.
+ * MUNDA Light Lab — one door, one light, five controls.
+ * Every change renders live on the door. No accounts, no server:
+ * the design persists locally.
  */
 
-export type ShapeId = 'top' | 'mid' | 'lower' | 'left' | 'diag' | 'wrap';
-export type DayNight = 'day' | 'night';
-export type LabStep = 'design' | 'final';
+export type LightEffect = 'static' | 'pulse' | 'wave' | 'glow' | 'flash';
 
 export interface LightDesign {
-  shape: ShapeId;
-  /** 0..100 — slide of the light guide along the door. */
-  position: number;
+  power: boolean;
   color: string;
   /** 0..100. */
   brightness: number;
-  dayNight: DayNight;
+  /** 0..100 — glow/halo strength of the light. */
+  intensity: number;
+  effect: LightEffect;
+  /** 0..100 — animation speed of the effect. */
+  speed: number;
 }
 
 export const DEFAULT_DESIGN: LightDesign = {
-  shape: 'mid',
-  position: 50,
+  power: true,
   color: '#ffffff',
   brightness: 85,
-  dayNight: 'night',
+  intensity: 45,
+  effect: 'static',
+  speed: 50,
 };
 
 interface DesignState extends LightDesign {
-  step: LabStep;
   setDesign: (patch: Partial<LightDesign>) => void;
-  setStep: (s: LabStep) => void;
   resetDesign: () => void;
 }
 
@@ -39,20 +39,18 @@ export const useDesignStore = create<DesignState>()(
   persist(
     (set) => ({
       ...DEFAULT_DESIGN,
-      step: 'design',
-
       setDesign: (patch) => set(patch),
-      setStep: (step) => set({ step }),
       resetDesign: () => set({ ...DEFAULT_DESIGN }),
     }),
     {
-      name: 'hermes-light-lab-v1',
+      name: 'munda-light-design-v1',
       partialize: (s) => ({
-        shape: s.shape,
-        position: s.position,
+        power: s.power,
         color: s.color,
         brightness: s.brightness,
-        dayNight: s.dayNight,
+        intensity: s.intensity,
+        effect: s.effect,
+        speed: s.speed,
       }),
     },
   ),
