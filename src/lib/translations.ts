@@ -519,6 +519,23 @@ export const en = {
   diff_easy: 'EASY',
   diff_easy_medium: 'EASY–MEDIUM',
   diff_medium: 'MEDIUM',
+
+  /* premium light lab */
+  plab_kicker: 'MUNDA LIGHT LAB',
+  plab_h1_a: 'EXPERIENCE LIGHT',
+  plab_h1_b: 'INSIDE',
+  plab_h1_accent: 'TEXTILE.',
+  plab_desc:
+    'Explore how MUNDA integrates light into textile surfaces for next-generation automotive interiors.',
+  plab_meta_1: 'TEXTILE LIGHTING',
+  plab_meta_2: 'LED + OPTICAL FIBER',
+  plab_meta_3: 'REAL-TIME CONTROL',
+  plab_stage_label: 'AUTOMOTIVE OBJECT — DOOR PANEL',
+  plab_panel_title: 'CONTROL INTERFACE',
+  plab_panel_footer: 'MUNDA LIGHTING SYSTEMS — INTERNAL DEMO',
+  plab_door_open: 'Open Door',
+  plab_door_close: 'Close Door',
+  plab_scene_hint: 'Drag — Rotate · Scroll — Zoom',
 } as const;
 
 export type TKey = keyof typeof en;
@@ -1024,6 +1041,23 @@ export const al: Record<TKey, string> = {
   diff_easy: 'E LEHTË',
   diff_easy_medium: 'E LEHTË–MESATARE',
   diff_medium: 'MESATARE',
+
+  /* premium light lab */
+  plab_kicker: 'MUNDA LIGHT LAB',
+  plab_h1_a: 'PËRJETO DRITËN',
+  plab_h1_b: 'BRENDA',
+  plab_h1_accent: 'TEKSTILIT.',
+  plab_desc:
+    'Eksploro se si MUNDA integron dritën në sipërfaqet tekstile për ambientet e brendshme automobilistike të gjeneratës së ardhshme.',
+  plab_meta_1: 'NDRICIM TEKSTIL',
+  plab_meta_2: 'LED + FIBËR OPTIKE',
+  plab_meta_3: 'KONTROLL NË KOHË REALE',
+  plab_stage_label: 'OBJEKT AUTOMOTIVE — PANELI I DERËS',
+  plab_panel_title: 'NDËRFAQJA E KONTROLLIT',
+  plab_panel_footer: 'MUNDA LIGHTING SYSTEMS — DEMO INTERNE',
+  plab_door_open: 'Hap Derën',
+  plab_door_close: 'Mbyll Derën',
+  plab_scene_hint: 'Zvarrit — Rrotullo · Scroll — Zmadho',
 };
 
 export function useT() {
