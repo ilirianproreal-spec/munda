@@ -48,13 +48,9 @@ function LightChannel({
       <mesh position={[0, 0, CARD_Z + 0.005]} material={grooveMat}>
         <boxGeometry args={[w + 0.05, 0.026, 0.014]} />
       </mesh>
-      {/* soft halo around the strip — the glow bleeding into the textile */}
-      <mesh position={[0, 0, CARD_Z + 0.013]} material={spillMat} ref={(m) => m && registerStrip(m, 'spill')}>
-        <planeGeometry args={[w + 0.18, 0.042]} />
-      </mesh>
-      {/* the light strip itself, seated in the channel, proud of the trim */}
+      {/* the light strip itself — thin, seated in the channel, proud of the trim */}
       <mesh position={[0, 0, CARD_Z + 0.018]} material={stripMat} ref={(m) => m && registerStrip(m, 'strip')}>
-        <boxGeometry args={[w, 0.014, 0.012]} />
+        <boxGeometry args={[w, 0.011, 0.011]} />
       </mesh>
       {/* spill on the textile below — the light bleeding into the material */}
       <mesh position={[0, -0.014, CARD_Z + 0.004]} material={spillMat} ref={(m) => m && registerStrip(m, 'spill')}>
