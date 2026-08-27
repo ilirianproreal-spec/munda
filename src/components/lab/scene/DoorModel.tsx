@@ -33,14 +33,12 @@ function LightChannel({
   w,
   grooveMat,
   stripMat,
-  spillMat,
 }: {
   x: number;
   y: number;
   w: number;
   grooveMat: THREE.Material;
   stripMat: THREE.Material;
-  spillMat: THREE.Material;
 }) {
   return (
     <group position={[x, y, 0]}>
@@ -48,13 +46,9 @@ function LightChannel({
       <mesh position={[0, 0, CARD_Z + 0.005]} material={grooveMat}>
         <boxGeometry args={[w + 0.05, 0.026, 0.014]} />
       </mesh>
-      {/* the light strip itself — thin, seated in the channel, proud of the trim */}
+      {/* the light strip itself — a single thin LED line, proud of the trim */}
       <mesh position={[0, 0, CARD_Z + 0.018]} material={stripMat} ref={(m) => m && registerStrip(m, 'strip')}>
         <boxGeometry args={[w, 0.011, 0.011]} />
-      </mesh>
-      {/* spill on the textile below — the light bleeding into the material */}
-      <mesh position={[0, -0.014, CARD_Z + 0.004]} material={spillMat} ref={(m) => m && registerStrip(m, 'spill')}>
-        <planeGeometry args={[w * 0.96, 0.05]} />
       </mesh>
     </group>
   );
@@ -80,8 +74,7 @@ export function DoorModel({ open }: { open: boolean }) {
     const groove = new THREE.MeshStandardMaterial({ color: '#04050a', roughness: 0.6, metalness: 0.1 });
     // — the MUNDA textile light (phase 03 drives these via lightLayer) —
     const strip = new THREE.MeshStandardMaterial({ color: '#ffffff', emissive: '#ffffff', emissiveIntensity: 1.35 });
-    const spill = new THREE.MeshStandardMaterial({ color: '#0a0a0f', emissive: '#ffffff', emissiveIntensity: 0.24, transparent: true, opacity: 0.9 });
-    return { fabricMat, leather, metal, dark, glass, groove, strip, spill };
+    return { fabricMat, leather, metal, dark, glass, groove, strip };
   }, [fabric]);
 
   useFrame((_, dt) => {
@@ -143,9 +136,9 @@ export function DoorModel({ open }: { open: boolean }) {
           {/* storage pocket */}
           <RoundedBox args={[0.88, 0.15, 0.05]} radius={0.012} smoothness={3} position={[0.05, CARD_Y - 0.41, CARD_Z + 0.018]} material={mats.dark} />
 
-          {/* ——— MUNDA textile light channels (integrated in the trim) ——— */}
-          <LightChannel x={0.1} y={CARD_Y + 0.1} w={0.66} grooveMat={mats.groove} stripMat={mats.strip} spillMat={mats.spill} />
-          <LightChannel x={0.32} y={CARD_Y - 0.28} w={0.4} grooveMat={mats.groove} stripMat={mats.strip} spillMat={mats.spill} />
+          {/* ——— MUNDA textile light — two integrated channels: one upper, one lower ——— */}
+          <LightChannel x={0.1} y={CARD_Y + 0.1} w={0.66} grooveMat={mats.groove} stripMat={mats.strip} />
+          <LightChannel x={0.32} y={CARD_Y - 0.28} w={0.4} grooveMat={mats.groove} stripMat={mats.strip} />
         </group>
       </group>
     </group>
