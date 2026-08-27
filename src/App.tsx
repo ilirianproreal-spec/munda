@@ -9,7 +9,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/company" element={<CompanyPage />} />
-      <Route path="/light-lab" element={<Navigate to="/light-lab/lab" replace />} />
+      <Route path="/light-lab" element={<Navigate to="/light-lab/premium" replace />} />
       <Route path="/light-lab/how" element={<Navigate to="/light-lab/lab" replace />} />
       <Route path="/light-lab/lab" element={<DesignLabScreen />} />
       <Route path="/light-lab/premium" element={<PremiumLabScreen />} />

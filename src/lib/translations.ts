@@ -536,6 +536,7 @@ export const en = {
   plab_door_open: 'Open Door',
   plab_door_close: 'Close Door',
   plab_scene_hint: 'Drag — Rotate · Scroll — Zoom',
+  plab_classic_to_premium: 'Premium Experience',
 } as const;
 
 export type TKey = keyof typeof en;
@@ -1058,6 +1059,7 @@ export const al: Record<TKey, string> = {
   plab_door_open: 'Hap Derën',
   plab_door_close: 'Mbyll Derën',
   plab_scene_hint: 'Zvarrit — Rrotullo · Scroll — Zmadho',
+  plab_classic_to_premium: 'Eksperiencë Premium',
 };
 
 export function useT() {
