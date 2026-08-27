@@ -44,17 +44,21 @@ function LightChannel({
 }) {
   return (
     <group position={[x, y, 0]}>
-      {/* recessed groove in the card */}
-      <mesh position={[0, 0, CARD_Z + 0.008]} material={grooveMat}>
-        <boxGeometry args={[w + 0.03, 0.02, 0.032]} />
+      {/* recessed dark channel in the trim (open toward the viewer) */}
+      <mesh position={[0, 0, CARD_Z + 0.005]} material={grooveMat}>
+        <boxGeometry args={[w + 0.05, 0.026, 0.014]} />
       </mesh>
-      {/* the light strip itself, nestled inside the channel */}
-      <mesh position={[0, 0, CARD_Z + 0.016]} material={stripMat} ref={(m) => m && registerStrip(m)}>
-        <boxGeometry args={[w, 0.011, 0.011]} />
+      {/* soft halo around the strip — the glow bleeding into the textile */}
+      <mesh position={[0, 0, CARD_Z + 0.013]} material={spillMat} ref={(m) => m && registerStrip(m, 'spill')}>
+        <planeGeometry args={[w + 0.18, 0.042]} />
       </mesh>
-      {/* soft spill on the textile below — the light bleeding into the material */}
-      <mesh position={[0, -0.012, CARD_Z + 0.0045]} material={spillMat} ref={(m) => m && registerStrip(m)}>
-        <planeGeometry args={[w * 0.96, 0.045]} />
+      {/* the light strip itself, seated in the channel, proud of the trim */}
+      <mesh position={[0, 0, CARD_Z + 0.018]} material={stripMat} ref={(m) => m && registerStrip(m, 'strip')}>
+        <boxGeometry args={[w, 0.014, 0.012]} />
+      </mesh>
+      {/* spill on the textile below — the light bleeding into the material */}
+      <mesh position={[0, -0.014, CARD_Z + 0.004]} material={spillMat} ref={(m) => m && registerStrip(m, 'spill')}>
+        <planeGeometry args={[w * 0.96, 0.05]} />
       </mesh>
     </group>
   );

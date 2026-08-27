@@ -4,18 +4,22 @@ import * as THREE from 'three';
 import { Interior } from './Interior';
 import { DoorModel } from './DoorModel';
 import { CameraRig } from './CameraRig';
-import { applyLightLayer } from '../../../lib/lightLayer';
+import { syncLightLayer } from '../../../lib/lightLayer';
 
 /**
- * Phase 02 — the 3D automotive visualization.
+ * Phase 03 — the automotive visualization with a live textile light.
  * Lazy-loaded (default export → React.lazy) so the rest of the website
- * never pays for the three.js bundle. The textile light layer is synced
- * every frame from `lightLayer`, ready for the phase 03 control panel.
+ * never pays for the three.js bundle. The light layer is driven every
+ * frame from `lightLayer` (colour / brightness / effects / wave offset).
  */
 
-/** Pushes the shared lightLayer config into every registered strip. */
+/** Drives the shared light layer: colour, intensity, effect envelope, wave travel. */
 function LightSync() {
-  useFrame(() => applyLightLayer());
+  const t = useRef(0);
+  useFrame((_, dt) => {
+    t.current += Math.min(dt, 0.1);
+    syncLightLayer(t.current, dt);
+  });
   return null;
 }
 
@@ -27,7 +31,7 @@ export default function LabScene3D({ open }: { open: boolean }) {
       <Canvas
         dpr={[1, 1.75]}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
-        camera={{ position: [0.885, 0.9, 1.983], fov: 38, near: 0.1, far: 30 }}
+        camera={{ position: [0.64, 0.71, 1.59], fov: 38, near: 0.1, far: 30 }}
         onCreated={({ gl }) => {
           gl.toneMapping = THREE.ACESFilmicToneMapping;
           gl.toneMappingExposure = 1.06;

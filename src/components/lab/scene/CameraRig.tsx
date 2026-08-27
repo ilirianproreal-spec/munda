@@ -12,7 +12,7 @@ import * as THREE from 'three';
 
 const AZ = { min: -0.85, max: 0.85 };
 const POL = { min: 0.92, max: 1.48 };
-const RAD = { min: 1.7, max: 3.6 };
+const RAD = { min: 1.3, max: 2.8 };
 const TARGET = new THREE.Vector3(0, 0.74, 0);
 
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
@@ -25,12 +25,12 @@ function pinchDist(p: Map<number, { x: number; y: number }>) {
 export function CameraRig({ open, domEl }: { open: boolean; domEl: HTMLElement | null }) {
   const { camera } = useThree();
   const s = useRef({
-    az: 0.42,
+    az: 0.38,
     pol: 1.18,
-    rad: 2.35,
-    tAz: 0.42,
+    rad: 1.85,
+    tAz: 0.38,
     tPol: 1.18,
-    tRad: 2.35,
+    tRad: 1.85,
     dragging: false,
     last: { x: 0, y: 0 },
     pointers: new Map<number, { x: number; y: number }>(),

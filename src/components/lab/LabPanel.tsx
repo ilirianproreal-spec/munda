@@ -4,6 +4,7 @@ import type { LightEffect } from '../../store/designStore';
 import { useT } from '../../lib/translations';
 import { cn } from '../../lib/cn';
 import { APP_VERSION } from '../../data/lab';
+import { lightLayer } from '../../lib/lightLayer';
 
 const COLORS = [
   { hex: '#ffffff', key: 'color_white' },
@@ -35,10 +36,9 @@ function Slider({
 }
 
 /**
- * Phase 01 — the control interface structure.
- * Restrained engineering-tool styling, thin borders, small cyan
- * indicators. Local UI state only — the wiring to the lighting
- * engine arrives in phase 02.
+ * Phase 03 — the control interface, wired to the 3D light layer.
+ * Every control writes straight into `lightLayer`; the scene syncs it
+ * every frame, so colour / brightness / effects react live on the door.
  */
 export function LabPanel({ className }: { className?: string }) {
   const t = useT();
@@ -48,6 +48,34 @@ export function LabPanel({ className }: { className?: string }) {
   const [intensity, setIntensity] = useState(50);
   const [effect, setEffect] = useState<LightEffect>('static');
   const [speed, setSpeed] = useState(50);
+
+  // — push every change straight into the shared 3D light layer —
+  const apply = {
+    power: (v: boolean) => {
+      lightLayer.enabled = v;
+      setPower(v);
+    },
+    color: (hex: string) => {
+      lightLayer.color.set(hex);
+      setColor(hex);
+    },
+    brightness: (v: number) => {
+      lightLayer.brightness = v / 100;
+      setBrightness(v);
+    },
+    intensity: (v: number) => {
+      lightLayer.intensity = v / 100;
+      setIntensity(v);
+    },
+    effect: (e: LightEffect) => {
+      lightLayer.effect = e;
+      setEffect(e);
+    },
+    speed: (v: number) => {
+      lightLayer.speed = v;
+      setSpeed(v);
+    },
+  };
 
   return (
     <aside aria-label="Light Lab control interface" className={cn('border border-line bg-panel/60 p-5', className)}>
@@ -65,7 +93,7 @@ export function LabPanel({ className }: { className?: string }) {
             <button
               key={String(on)}
               type="button"
-              onClick={() => setPower(on)}
+              onClick={() => apply.power(on)}
               aria-pressed={power === on}
               className={cn(
                 'py-2.5 font-mono text-[10px] font-bold uppercase tracking-[0.3em] transition-colors duration-200',
@@ -86,7 +114,7 @@ export function LabPanel({ className }: { className?: string }) {
             <button
               key={c.hex}
               type="button"
-              onClick={() => setColor(c.hex)}
+              onClick={() => apply.color(c.hex)}
               aria-label={t(c.key)}
               title={t(c.key)}
               className={cn(
@@ -109,7 +137,7 @@ export function LabPanel({ className }: { className?: string }) {
             <input
               type="color"
               value={color}
-              onChange={(e) => setColor(e.target.value)}
+              onChange={(e) => apply.color(e.target.value)}
               className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
               aria-label={t('color_custom')}
             />
@@ -119,12 +147,12 @@ export function LabPanel({ className }: { className?: string }) {
 
       {/* BRIGHTNESS */}
       <div className="mb-6">
-        <Slider label={t('ctrl_brightness')} value={brightness} onChange={setBrightness} />
+        <Slider label={t('ctrl_brightness')} value={brightness} onChange={apply.brightness} />
       </div>
 
       {/* INTENSITY */}
       <div className="mb-6">
-        <Slider label={t('ctrl_intensity')} value={intensity} onChange={setIntensity} />
+        <Slider label={t('ctrl_intensity')} value={intensity} onChange={apply.intensity} />
       </div>
 
       {/* EFFECT */}
@@ -135,7 +163,7 @@ export function LabPanel({ className }: { className?: string }) {
             <button
               key={e}
               type="button"
-              onClick={() => setEffect(e)}
+              onClick={() => apply.effect(e)}
               aria-pressed={effect === e}
               className={cn(
                 'border px-2 py-2 font-mono text-[8px] uppercase tracking-[0.12em] transition-colors duration-200',
@@ -152,7 +180,7 @@ export function LabPanel({ className }: { className?: string }) {
 
       {/* SPEED */}
       <div className="mb-6">
-        <Slider label={t('ctrl_speed')} value={speed} onChange={setSpeed} />
+        <Slider label={t('ctrl_speed')} value={speed} onChange={apply.speed} />
       </div>
 
       {/* footer */}

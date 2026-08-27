@@ -47,8 +47,8 @@ export function PremiumLabScreen() {
 
         {/* ——— stage + panel ——— */}
         <div className="mt-12 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
-          <LabStage className="order-1" />
-          <LabPanel className="order-2 lg:order-none lg:sticky lg:top-20" />
+          <LabStage />
+          <LabPanel className="lg:sticky lg:top-20" />
         </div>
       </main>
     </div>
